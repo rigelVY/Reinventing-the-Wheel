@@ -1,9 +1,8 @@
 # Autonomous driving software for Tsukuba Challenge
 
 ## Requirements
-Ubuntu: 16.04
-ROS: Kinetic
+Ubuntu: 18.04
+ROS: Melodic
 
 ## Build the Workpace
-
 
