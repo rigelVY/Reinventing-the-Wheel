@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="world" default="empty.world"/>
+  <arg name="gui" default="true"/>
+
+  <arg name="model" default="$(find rtw_gazebo)/xacro/roomba.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder"/>
+
+  <!-- Start Gazebo with the world file -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find rtw_gazebo)/worlds/$(arg world)"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Spawn model in Gazebo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model roomba" />
+
+  <!-- Load the controllers -->
+  <rosparam command="load" file="$(find rtw_gazebo)/config/diff_drive_controller.yaml" ns="/roomba" />
+  <rosparam command="load" file="$(find rtw_gazebo)/config/joint_state_controller.yaml" ns="/roomba"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/roomba" args="diff_drive_controller joint_state_controller" />
+
+  <!-- Convert joint states to TF transforms for rviz -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" ns="/roomba"/>
+</launch>
+
