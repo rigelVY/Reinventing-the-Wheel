@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
+        - /PointCloud21
       Splitter Ratio: 0.5
     Tree Height: 314
   - Class: rviz/Selection
@@ -100,6 +101,16 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        velodyne:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        velodyne_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -124,11 +135,15 @@ Visualization Manager:
         left_wheel_link:
           Value: false
         lidar_link:
-          Value: false
+          Value: true
         odom:
           Value: true
         right_wheel_link:
           Value: false
+        velodyne:
+          Value: true
+        velodyne_base_link:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
@@ -151,6 +166,9 @@ Visualization Manager:
               {}
             right_wheel_link:
               {}
+            velodyne_base_link:
+              velodyne:
+                {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
@@ -165,7 +183,37 @@ Visualization Manager:
       Transport Hint: raw
       Unreliable: false
       Value: true
-    - Alpha: 1
+    - Alpha: 0.800000011920929
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 239; 41; 41
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 0
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 2
+      Size (m): 0.05000000074505806
+      Style: Points
+      Topic: /velodyne_points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Alpha: 0.800000011920929
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
         Max Value: 10
@@ -174,10 +222,10 @@ Visualization Manager:
       Axis: Z
       Channel Name: intensity
       Class: rviz/LaserScan
-      Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color: 23; 193; 253
+      Color Transformer: FlatColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 0
@@ -187,14 +235,14 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.019999999552965164
+      Size (Pixels): 2
+      Size (m): 0.029999999329447746
       Style: Points
       Topic: /lidar_link/scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -223,25 +271,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.051290512084961
+      Distance: 15.071874618530273
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -3.056274890899658
-        Y: -0.000809086486697197
-        Z: 2.0398495197296143
+        X: 1.8761383295059204
+        Y: -1.2513140439987183
+        Z: 1.643722414970398
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8303986191749573
+      Pitch: 0.6703988313674927
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.168581962585449
+      Yaw: 3.713580369949341
     Saved: ~
 Window Geometry:
   Displays:
