@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="waypoints_csv" default="$(find waypoint_loader)/../../data/waypoint/waypoints.csv" />
+  <arg name="frame_id" default="odom" />
+
+  <node name="waypoint_loader_node" pkg="waypoint_loader" type="waypoint_loader_node" output="screen" respawn="true" >
+    <param name="waypoints_csv" value="$(arg waypoints_csv)" />
+    <param name="frame_id" value="$(arg frame_id)" />
+  </node>
+</launch>
