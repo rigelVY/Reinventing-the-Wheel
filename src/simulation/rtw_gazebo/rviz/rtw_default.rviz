@@ -7,7 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
-        - /PointCloud21
+        - /TF1/Tree1/odom1
       Splitter Ratio: 0.5
     Tree Height: 314
   - Class: rviz/Selection
@@ -91,11 +91,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        lidar_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         right_wheel_link:
           Alpha: 1
           Show Axes: false
@@ -130,12 +125,12 @@ Visualization Manager:
           Value: false
         camera_link:
           Value: false
+        ground_truth:
+          Value: true
         imu_link:
           Value: false
         left_wheel_link:
           Value: false
-        lidar_link:
-          Value: true
         odom:
           Value: true
         right_wheel_link:
@@ -143,7 +138,7 @@ Visualization Manager:
         velodyne:
           Value: true
         velodyne_base_link:
-          Value: true
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
@@ -162,13 +157,13 @@ Visualization Manager:
               {}
             left_wheel_link:
               {}
-            lidar_link:
-              {}
             right_wheel_link:
               {}
             velodyne_base_link:
               velodyne:
                 {}
+          ground_truth:
+            {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
@@ -208,7 +203,7 @@ Visualization Manager:
       Size (Pixels): 2
       Size (m): 0.05000000074505806
       Style: Points
-      Topic: /velodyne_points
+      Topic: /velodyne/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -271,25 +266,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 15.071874618530273
+      Distance: 6.415804862976074
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.8761383295059204
-        Y: -1.2513140439987183
-        Z: 1.643722414970398
+        X: 0.038575269281864166
+        Y: -0.38927650451660156
+        Z: 0.3034231960773468
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6703988313674927
+      Pitch: 0.5303988456726074
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.713580369949341
+      Yaw: 3.4285807609558105
     Saved: ~
 Window Geometry:
   Displays:

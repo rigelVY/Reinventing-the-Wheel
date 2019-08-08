@@ -22,7 +22,7 @@ int main(int argc, char **argv){
 
   //rosparam
   pnh.getParam("model_name",  model_name);
-  pnh.getParam("world_frame", world_frame);
+  pnh.getParam("world_frame",  world_frame);
   pnh.getParam("base_frame",  base_frame);
   pnh.getParam("hz", hz);
 
