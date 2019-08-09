@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="twist_topic" default="/cmd_vel" />
+  <arg name="path_topic" default="/waypoints_raw" />
+  <arg name="current_pose_topic" default="/current_pose" />
+  <arg name="linear_velocity" default="0.1" />
+  <arg name="lookahead_distance" default="0.5" />
+
+  <node name="pure_pursuit_node" pkg="pure_pursuit" type="pure_pursuit_node" output="screen" respawn="true" >
+    <param name="twist_topic" value="$(arg twist_topic)" />
+    <param name="path_topic" value="$(arg path_topic)" />
+    <param name="current_pose_topic" value="$(arg current_pose_topic)" />
+    <param name="linear_velocity" value="$(arg linear_velocity)" />
+    <param name="lookahead_distance" value="$(arg lookahead_distance)" />
+  </node>
+</launch>
