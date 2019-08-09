@@ -2,10 +2,11 @@
 
 WaypointLoader::WaypointLoader(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
 {
+    pnh_.param<std::string>("path_topic", path_topic_, "/waypoints_raw");
     pnh_.param<std::string>("waypoints_csv", waypoints_path_, "/tmp/waypoints.csv");
     pnh_.param<std::string>("frame_id", frame_id_, "odom");
-    wps_pub_ = nh_.advertise<nav_msgs::Path>("/waypoints_raw", 10);
-    LoadWaypointsArray_();
+    wps_pub_ = nh_.advertise<nav_msgs::Path>(path_topic_, 10);
+    WaypointLoader::LoadWaypointsArray_();
     boost::thread wp_publish_thread(boost::bind(&WaypointLoader::PublishWaypoints_, this));
 }
 
