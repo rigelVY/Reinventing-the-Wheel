@@ -64,7 +64,6 @@ void WaypointLoader::LoadWaypoint_(const std::string& line, geometry_msgs::PoseS
     wp->pose.position.x = std::stod(columns[0]);
     wp->pose.position.y = std::stod(columns[1]);
     wp->pose.position.z = std::stod(columns[2]);
-    // ROS_INFO("wp_x:%f", wp->pose.position.x);
 
     geometry_msgs::Quaternion quat = tf::createQuaternionMsgFromYaw(std::stod(columns[3]));
     wp->pose.orientation.x = quat.x;
