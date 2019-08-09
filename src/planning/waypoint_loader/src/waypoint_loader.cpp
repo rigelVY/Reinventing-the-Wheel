@@ -17,9 +17,9 @@ WaypointLoader::~WaypointLoader()
 
 void WaypointLoader::PublishWaypoints_(void)
 {
+    ros::Rate loop_rate(10);
     while(ros::ok())
     {
-        ros::Rate loop_rate(10);
         wps_pub_.publish(wps_);
         loop_rate.sleep();
     }
