@@ -32,13 +32,13 @@ void DummyLocalizer::PublishCurrentPoseStamped_(void)
         }
 
         geometry_msgs::PoseStamped source_pose;
-        source_pose.header.frame_id=base_frame_;
-        source_pose.header.stamp=ros::Time(0);
-        source_pose.pose.orientation.w=1.0;
+        source_pose.header.frame_id = base_frame_;
+        source_pose.header.stamp = ros::Time(0);
+        source_pose.pose.orientation.w = 1.0;
 
         geometry_msgs::PoseStamped target_pose;
-        target_pose.header.frame_id=map_frame_;
-        target_pose.header.stamp=ros::Time(0);
+        target_pose.header.frame_id = map_frame_;
+        target_pose.header.stamp = ros::Time(0);
         tf2::doTransform(source_pose, target_pose, transform_stamped);
 
         current_pose_pub_.publish(target_pose);

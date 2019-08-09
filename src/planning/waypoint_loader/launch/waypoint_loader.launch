@@ -2,11 +2,11 @@
 <launch>
   <arg name="path_topic" default="/waypoints_raw" />
   <arg name="waypoints_csv" default="$(find waypoint_loader)/../../data/waypoint/waypoints.csv" />
-  <arg name="frame_id" default="odom" />
+  <arg name="map_frame" default="odom" />
 
   <node name="waypoint_loader_node" pkg="waypoint_loader" type="waypoint_loader_node" output="screen" respawn="true" >
     <param name="path_topic" value="$(arg path_topic)" />
     <param name="waypoints_csv" value="$(arg waypoints_csv)" />
-    <param name="frame_id" value="$(arg frame_id)" />
+    <param name="map_frame" value="$(arg map_frame)" />
   </node>
 </launch>

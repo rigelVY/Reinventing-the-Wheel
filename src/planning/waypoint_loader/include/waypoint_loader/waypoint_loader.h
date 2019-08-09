@@ -30,7 +30,7 @@ private:
     
     std::string path_topic_;
     std::string waypoints_path_;
-    std::string frame_id_;
+    std::string map_frame_;
     nav_msgs::Path wps_;
     
     ros::Publisher wps_pub_;

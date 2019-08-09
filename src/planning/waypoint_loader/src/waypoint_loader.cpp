@@ -4,7 +4,7 @@ WaypointLoader::WaypointLoader(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh)
 {
     pnh_.param<std::string>("path_topic", path_topic_, "/waypoints_raw");
     pnh_.param<std::string>("waypoints_csv", waypoints_path_, "/tmp/waypoints.csv");
-    pnh_.param<std::string>("frame_id", frame_id_, "odom");
+    pnh_.param<std::string>("map_frame", map_frame_, "odom");
     wps_pub_ = nh_.advertise<nav_msgs::Path>(path_topic_, 10);
     WaypointLoader::LoadWaypointsArray_();
     boost::thread wp_publish_thread(boost::bind(&WaypointLoader::PublishWaypoints_, this));
@@ -30,7 +30,7 @@ void WaypointLoader::LoadWaypointsArray_(void)
 {
     current_time_ = ros::Time::now();
     wps_.header.stamp=current_time_;
-    wps_.header.frame_id=frame_id_;
+    wps_.header.frame_id=map_frame_;
 
     std::ifstream ifs(waypoints_path_);
 
@@ -73,5 +73,5 @@ void WaypointLoader::LoadWaypoint_(const std::string& line, geometry_msgs::PoseS
     wp->pose.orientation.w = quat.w;
 
     wp->header.stamp=current_time_;
-    wp->header.frame_id=frame_id_;
+    wp->header.frame_id=map_frame_;
 }
