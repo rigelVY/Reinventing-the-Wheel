@@ -70,17 +70,22 @@ void NdtMatching::InitialposeCallback_(const geometry_msgs::PoseWithCovarianceSt
   initial_pose_.position.x = msg->pose.pose.position.x + transform.getOrigin().x();
   initial_pose_.position.y = msg->pose.pose.position.y + transform.getOrigin().y();
   initial_pose_.position.z = msg->pose.pose.position.z + transform.getOrigin().z();
-  initial_pose_.orientation = msg->pose.pose.orientation;
 
-  // tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z,
-  //                  msg->pose.pose.orientation.w);
-  // tf::Matrix3x3 m(q);
-  // m.getRPY(initial_pose_.roll, initial_pose_.pitch, initial_pose_.yaw);
+  double initial_pose_roll, initial_pose_pitch, initial_pose_yaw;
+  tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z,
+                   msg->pose.pose.orientation.w);
+  tf::Matrix3x3 m(q);
+  m.getRPY(initial_pose_roll, initial_pose_pitch, initial_pose_yaw);
+  Eigen::AngleAxisf init_rotation_x(initial_pose_roll, Eigen::Vector3f::UnitX());
+  Eigen::AngleAxisf init_rotation_y(initial_pose_pitch, Eigen::Vector3f::UnitY());
+  Eigen::AngleAxisf init_rotation_z(initial_pose_yaw, Eigen::Vector3f::UnitZ());
+  Eigen::Translation3f init_translation(initial_pose_.position.x, initial_pose_.position.y, initial_pose_.position.z);
+  init_guess_ = (init_translation * init_rotation_x * init_rotation_y * init_rotation_z).matrix();
 
   // Set initial alignment estimate found using robot odometry.
-  Eigen::AngleAxisf init_rotation (0.6931, Eigen::Vector3f::UnitZ ());
-  Eigen::Translation3f init_translation (1.79387, 0.720047, 0);
-  init_guess_ = (init_translation * init_rotation).matrix ();
+  // Eigen::AngleAxisf init_rotation (0.6931, Eigen::Vector3f::UnitZ ());
+  // Eigen::Translation3f init_translation (1.79387, 0.720047, 0);
+  // init_guess_ = (init_translation * init_rotation).matrix ();
 
   init_pos_set_ = 1;
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="voxel_leaf_size" default="1.0" />
+  <arg name="voxel_leaf_size" default="0.9" />
   <arg name="filtered_points_topic" default="filtered_points" />
   <arg name="points_topic" default="points_raw" />
 
