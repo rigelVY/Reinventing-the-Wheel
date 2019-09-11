@@ -10,20 +10,11 @@ install dependencies
 sudo apt install ros-melodic-velodyne*
 ```
 
-make workspace
-```
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
-catkin_init_workspace
-cd ../
-catkin_make
-```
-
 clone & build of Reinventing-the-Wheel package
 ```
-cd ~/catkin_ws/src
+cd ~
 git clone https://github.com/rigelVY/Reinventing-the-Wheel.git
-cd ../
+cd Reinventing-the-Wheel
 catkin_make
 ```
 
