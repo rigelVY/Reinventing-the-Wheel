@@ -1,7 +1,7 @@
 # Autonomous driving software for Tsukuba Challenge
 
 ## Requirements
-Ubuntu: 18.04
+Ubuntu: 18.04  
 ROS: Melodic
 
 ## Build the Workpace
@@ -29,6 +29,20 @@ launch Rviz.
 rosrun rviz rviz
 ```
 
+### Case 1: simulation mode
+launch gazebo and Rviz
+```
+roslaunch rtw_gazebo rtw_gazebo.launch
+```
+
+launch the RTW node
+```
+roslaunch waypoint_loader waypoint_loader.launch
+roslaunch dummy_localizer dummy_localizer.launch
+roslaunch pure_pursuit pure_pursuit.launch twist_topic:=/roomba/diff_drive_controller/cmd_vel
+```
+
+### Case 2: real environment mode
 launch the RTW node for manipulating WHILL.
 ```
 roslaunch waypoint_loader waypoint_loader.launch
