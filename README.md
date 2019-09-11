@@ -5,20 +5,40 @@ Ubuntu: 18.04
 ROS: Melodic
 
 ## Build the Workpace
+install dependencies
+```
+sudo apt install ros-melodic-velodyne*
+```
 
+make workspace
+```
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_init_workspace
+cd ../
+catkin_make
+```
+
+clone & build of Reinventing-the-Wheel package
+```
+cd ~/catkin_ws/src
+git clone https://github.com/rigelVY/Reinventing-the-Wheel.git
+cd ../
+catkin_make
+```
 
 ## Launch RTW and manipulate WHILL
-Launch WHILL driver.
+launch WHILL driver.
 ```
 roslaunch ros_whill ros_whill.launch
 ```
 
-Launch Rviz.
+launch Rviz.
 ```
 rosrun rviz rviz
 ```
 
-Launch the RTW node for manipulating WHILL.
+launch the RTW node for manipulating WHILL.
 ```
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
