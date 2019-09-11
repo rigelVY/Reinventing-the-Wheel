@@ -19,15 +19,6 @@ catkin_make
 ```
 
 ## Launch RTW and manipulate WHILL
-launch WHILL driver.
-```
-roslaunch ros_whill ros_whill.launch
-```
-
-launch Rviz.
-```
-rosrun rviz rviz
-```
 
 ### Case 1: simulation mode
 launch gazebo and Rviz
@@ -43,6 +34,16 @@ roslaunch pure_pursuit pure_pursuit.launch twist_topic:=/roomba/diff_drive_contr
 ```
 
 ### Case 2: real environment mode
+launch WHILL driver.
+```
+roslaunch ros_whill ros_whill.launch
+```
+
+launch Rviz.
+```
+rosrun rviz rviz
+```
+
 launch the RTW node for manipulating WHILL.
 ```
 roslaunch waypoint_loader waypoint_loader.launch
