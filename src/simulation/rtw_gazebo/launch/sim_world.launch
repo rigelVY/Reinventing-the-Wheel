@@ -2,10 +2,10 @@
 <launch>
   <arg name="world" default="empty.world"/>
   <arg name="gui" default="true"/>
-
   <arg name="odom_data" default="wheel" /> <!-- wheel or gazebo -->
-  <arg name="model" default="$(find rtw_gazebo)/xacro/dtw_robot/dtw_robot.xacro" />
-  <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder"/>
+  
+  <arg name="model" default="whill_modelc" />
+  <param name="robot_description" command="$(find xacro)/xacro $(find rtw_gazebo)/xacro/$(arg model)/$(arg model).xacro --inorder"/>
 
   <!-- Start Gazebo with the world file -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -18,28 +18,28 @@
   </include>
 
   <!-- Spawn model in Gazebo -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model dtw_robot" />
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg model)" />
 
   <!-- Publish tf (wheel odometry data or the exact position in gazebo) -->
   <group if="$(eval odom_data=='wheel')">
-    <param name="/dtw_robot/diff_drive_controller/enable_odom_tf" value="true" />
+    <param name="/$(arg model)/diff_drive_controller/enable_odom_tf" value="true" />
   </group>
 
   <group if="$(eval odom_data=='gazebo')">
-    <param name="/dtw_robot/diff_drive_controller/enable_odom_tf" value="false" />
+    <param name="/$(arg model)/diff_drive_controller/enable_odom_tf" value="false" />
     <node name="gazebo_model_states_to_tf" pkg="rtw_gazebo" type="gazebo_model_states_to_tf">
-      <param name="model_name" value="dtw_robot" />
+      <param name="model_name" value="$(arg model)" />
       <param name="base_frame" value="base_link" />
       <param name="world_frame" value="odom" />
     </node>
   </group>
 
   <!-- Load the controllers -->
-  <rosparam command="load" file="$(find rtw_gazebo)/config/joint_state_controller.yaml" ns="/dtw_robot"/>
-  <rosparam command="load" file="$(find sim_lecture)/config/diff_drive_controller.yaml" ns="/dtw_robot" />
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/dtw_robot" args="diff_drive_controller joint_state_controller" />
+  <rosparam command="load" file="$(find rtw_gazebo)/config/$(arg model)/joint_state_controller.yaml" ns="$(arg model)"/>
+  <rosparam command="load" file="$(find rtw_gazebo)/config/$(arg model)/diff_drive_controller.yaml" ns="$(arg model)" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg model)" args="diff_drive_controller joint_state_controller" />
 
   <!-- Convert joint states to TF transforms for rviz -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" ns="/dtw_robot"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" ns="$(arg model)"/>
 </launch>
 

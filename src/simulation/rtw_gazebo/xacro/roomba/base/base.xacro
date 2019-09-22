@@ -79,13 +79,6 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="purple"/>
     </visual>
-    <collision>
-      <geometry>
-        <mesh filename="package://rtw_gazebo/stl/Roomba_model.stl" />
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <material name="purple"/>
-    </collision>
   </link>
   <gazebo reference="body_link">
     <material>Gazebo/Purple</material>
