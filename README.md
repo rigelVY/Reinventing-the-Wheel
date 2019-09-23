@@ -23,9 +23,9 @@ catkin_make
 ### Case 1: simulation mode
 1. launch gazebo and Rviz.  
 we can choose one of the following robot models.
+- whill_modelc (*default*)
 - dtw_robot
 - roomba
-- whill_modelc
 
 ```
 roslaunch rtw_gazebo rtw_gazebo.launch model:=<robot model>
