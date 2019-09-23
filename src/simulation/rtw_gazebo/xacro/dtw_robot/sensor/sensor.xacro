@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot name="dtw_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include sensor macros -->
+  <xacro:include filename="$(find rtw_gazebo)/xacro/dtw_robot/sensor/camera/camera.xacro" />
+  <xacro:include filename="$(find rtw_gazebo)/xacro/dtw_robot/sensor/imu/imu.xacro" />
+  <xacro:include filename="$(find rtw_gazebo)/xacro/dtw_robot/sensor/2d_lidar/2d_lidar.xacro" />
+  <xacro:include filename="$(find rtw_gazebo)/xacro/dtw_robot/sensor/3d_lidar/3d_lidar.xacro" />
+
+  <!-- Enable Flag -->
+  <xacro:arg name="camera_enabled" default="true" />
+  <!-- <xacro:arg name="gps_enabled" default="true" /> -->
+  <xacro:arg name="imu_enabled" default="true" />
+  <xacro:arg name="2dlidar_enabled" default="false" />
+  <xacro:arg name="3dlidar_enabled" default="true" />
+  
+  <!-- ADD SENSORS -->
+  <!-- Camera -->
+  <xacro:if value="$(arg camera_enabled)">
+    <xacro:camera_macro prefix="camera" parent="base_link" xyz="-0.05 0 0.3"/>
+  </xacro:if>
+  <!-- GPS -->
+  <!-- <xacro:if value="$(arg gps_enabled)">
+    <xacro:gps_gazebo_v0/>
+  </xacro:if> -->
+  <!-- IMU -->
+  <xacro:if value="$(arg imu_enabled)">
+    <xacro:imu_macro prefix="imu" parent="base_link" xyz="-0.05 0 0"/>
+  </xacro:if>
+  <!-- 2D LIDAR -->
+  <xacro:if value="$(arg 2dlidar_enabled)">
+    <xacro:lidar_2d_macro prefix="lidar" parent="base_link" xyz="-0.05 0 0.14"/>
+  </xacro:if>
+  <!-- 3D LIDAR -->
+  <xacro:if value="$(arg 3dlidar_enabled)">
+    <xacro:velodyne_vlp16 parent="base_link" xyz="-0.05 0 0.2"/>
+  </xacro:if> 
+</robot>
