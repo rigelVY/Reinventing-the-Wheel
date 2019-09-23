@@ -21,30 +21,35 @@ catkin_make
 ## Launch RTW and manipulate WHILL
 
 ### Case 1: simulation mode
-launch gazebo and Rviz
+1. launch gazebo and Rviz.  
+we can choose one of the following robot models.
+- dtw_robot
+- roomba
+- whill_modelc
+
 ```
-roslaunch rtw_gazebo rtw_gazebo.launch
+roslaunch rtw_gazebo rtw_gazebo.launch model:=<robot model>
 ```
 
-launch the RTW node
+2. launch the RTW node.
 ```
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
-roslaunch pure_pursuit pure_pursuit.launch twist_topic:=/roomba/diff_drive_controller/cmd_vel
+roslaunch pure_pursuit pure_pursuit.launch twist_topic:=/<robot model>/diff_drive_controller/cmd_vel
 ```
 
 ### Case 2: real environment mode
-launch WHILL driver.
+1. launch WHILL driver.
 ```
 roslaunch ros_whill ros_whill.launch
 ```
 
-launch Rviz.
+2. launch Rviz.
 ```
 rosrun rviz rviz
 ```
 
-launch the RTW node for manipulating WHILL.
+3. launch the RTW node for manipulating WHILL.
 ```
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
