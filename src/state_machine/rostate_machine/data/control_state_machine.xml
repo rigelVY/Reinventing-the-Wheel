@@ -1,5 +1,5 @@
 <state_machine>
-    <init_state name="autonomous_driving"/>
+    <init_state name="manual_driving"/>
     <state_machine_name name="control_state_machine"/>
 
     <callback tag="autonomous_driving" when="always" states="autonomous_driving"/>
