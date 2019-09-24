@@ -68,7 +68,6 @@ boost::optional<rostate_machine::Event> WhillInterface::AutonomousStateCallback_
         return ret;
     }
 
-    ROS_INFO("autonomous driving now!");
     return boost::none;
 }
 
@@ -101,7 +100,6 @@ boost::optional<rostate_machine::Event> WhillInterface::ManualStateCallback_(voi
         return ret;
     }
 
-    ROS_INFO("manual driving now!");
     return boost::none;
 }
 
@@ -140,6 +138,5 @@ boost::optional<rostate_machine::Event> WhillInterface::StoppingStateCallback_(v
         return ret;
     }
 
-    ROS_INFO("stopping now!");
     return boost::none;
 }
