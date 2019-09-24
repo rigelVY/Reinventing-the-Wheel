@@ -11,7 +11,6 @@ WhillInterface::WhillInterface(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh)
     twist_pub_ = nh_.advertise<geometry_msgs::Twist>(pub_twist_topic_, 1);
     joy_sub_ = nh_.subscribe(sub_joy_topic_, 1, &WhillInterface::JoyCallback_, this);
     twist_sub_ = nh_.subscribe(sub_twist_topic_, 1, &WhillInterface::TwistCallback_, this);
-    // boost::thread publish_thread(boost::bind(&WhillInterface::PublishJoy_, this));
 
     client_.registerCallback(std::bind(&WhillInterface::AutonomousStateCallback_, this),"autonomous_driving");
     client_.registerCallback(std::bind(&WhillInterface::ManualStateCallback_, this),"manual_driving");
@@ -55,6 +54,21 @@ boost::optional<rostate_machine::Event> WhillInterface::AutonomousStateCallback_
         joy_pub_.publish(joy_msg);
     }
 
+    if(sub_joy_msg_.buttons[0])
+    {
+        rostate_machine::Event ret;
+        ret.header.stamp = ros::Time::now();
+        ret.trigger_event_name = "stop";
+        return ret;
+    }
+    else if(sub_joy_msg_.buttons[5])
+    {
+        rostate_machine::Event ret;
+        ret.header.stamp = ros::Time::now();
+        ret.trigger_event_name = "manual_override";
+        return ret;
+    }
+
     ROS_INFO("autonomous driving now!");
     return boost::none;
 }
@@ -73,13 +87,20 @@ boost::optional<rostate_machine::Event> WhillInterface::ManualStateCallback_(voi
         joy_pub_.publish(sub_joy_msg_);
     }
 
-    // if(client_.getCurrentStateDuration().toSec()>20.0)
-    // {
-    //     rostate_machine::Event ret;
-    //     ret.header.stamp = ros::Time::now();
-    //     ret.trigger_event_name = "system_bringup";
-    //     return ret;
-    // }
+    if(sub_joy_msg_.buttons[0])
+    {
+        rostate_machine::Event ret;
+        ret.header.stamp = ros::Time::now();
+        ret.trigger_event_name = "stop";
+        return ret;
+    }
+    else if(sub_joy_msg_.buttons[4])
+    {
+        rostate_machine::Event ret;
+        ret.header.stamp = ros::Time::now();
+        ret.trigger_event_name = "system_bringup";
+        return ret;
+    }
 
     ROS_INFO("manual driving now!");
     return boost::none;
@@ -89,11 +110,35 @@ boost::optional<rostate_machine::Event> WhillInterface::StoppingStateCallback_(v
 {
     if(mode_ == "simulation")
     {
-
+        geometry_msgs::Twist cmd_vel;
+        cmd_vel.linear.x  = 0.0;
+        cmd_vel.angular.z = 0.0;
+        twist_pub_.publish(cmd_vel);
     }
     else if(mode_ == "real")
     {
-        
+        sensor_msgs::Joy joy_msg;
+        joy_msg.header.stamp=ros::Time::now();
+        joy_msg.header.frame_id="";
+        joy_msg.axes.resize(2);
+        joy_msg.axes[1] = 0.0;
+        joy_msg.axes[0] = 0.0;
+        joy_pub_.publish(joy_msg);
+    }
+
+    if(sub_joy_msg_.buttons[4])
+    {
+        rostate_machine::Event ret;
+        ret.header.stamp = ros::Time::now();
+        ret.trigger_event_name = "recovery_autonomous";
+        return ret;
+    }
+    else if(sub_joy_msg_.buttons[5])
+    {
+        rostate_machine::Event ret;
+        ret.header.stamp = ros::Time::now();
+        ret.trigger_event_name = "recovery_manual";
+        return ret;
     }
 
     ROS_INFO("stopping now!");

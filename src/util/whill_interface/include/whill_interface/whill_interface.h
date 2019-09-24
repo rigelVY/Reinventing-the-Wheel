@@ -20,7 +20,6 @@ public:
     WhillInterface(ros::NodeHandle nh,ros::NodeHandle pnh);
     ~WhillInterface();
 private:
-    // void PublishJoy_(void);
     void TwistCallback_(const geometry_msgs::Twist::ConstPtr msg);
     void JoyCallback_(const sensor_msgs::Joy::ConstPtr msg);
 
@@ -34,6 +33,7 @@ private:
     ros::NodeHandle pnh_;
     
     std::string mode_;
+    std::string transition_state_topic_;
     std::string pub_joy_topic_;
     std::string pub_twist_topic_;
     std::string sub_joy_topic_;

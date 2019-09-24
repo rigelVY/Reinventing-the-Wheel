@@ -7,9 +7,9 @@
     <callback tag="stopping" when="always" states="stopping"/>
 
     <transition from = "manual_driving" to="autonomous_driving" name="system_bringup"/>
-    <transition from = "manual_driving" to="stopping" name="stopped"/>
+    <transition from = "manual_driving" to="stopping" name="stop"/>
     <transition from = "autonomous_driving" to="manual_driving" name="manual_override"/>
-    <transition from = "autonomous_driving" to="stopping" name="stopped"/>
+    <transition from = "autonomous_driving" to="stopping" name="stop"/>
     <transition from = "stopping" to="manual_driving" name="recovery_manual"/>
-    <transition from = "stopping" to="autonomous_driving" name="recovery_auto"/>
+    <transition from = "stopping" to="autonomous_driving" name="recovery_autonomous"/>
 </state_machine>

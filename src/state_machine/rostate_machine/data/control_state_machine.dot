@@ -2,10 +2,10 @@ digraph G {
 graph [bgcolor=white]
 0 [color=black,fontsize=12,shape=ellipse,label="manual_driving"]
 ;
-1 [color=blue,fontsize=12,shape=ellipse,label="autonomous_driving"]
-[fontcolor=blue]
+1 [color=black,fontsize=12,shape=ellipse,label="autonomous_driving"]
 ;
-2 [color=black,fontsize=12,shape=ellipse,label="stopping"]
+2 [color=blue,fontsize=12,shape=ellipse,label="stopping"]
+[fontcolor=blue]
 ;
 0->1 [color=gray]
 [fontsize=12]
@@ -17,7 +17,7 @@ graph [bgcolor=white]
 [fontsize=12]
 [style=solid]
 [fontcolor=black]
-[label="stopped"]
+[label="stop"]
 ;
 1->0 [color=gray]
 [fontsize=12]
@@ -29,7 +29,7 @@ graph [bgcolor=white]
 [fontsize=12]
 [style=solid]
 [fontcolor=black]
-[label="stopped"]
+[label="stop"]
 ;
 2->0 [color=gray]
 [fontsize=12]
@@ -41,6 +41,6 @@ graph [bgcolor=white]
 [fontsize=12]
 [style=solid]
 [fontcolor=black]
-[label="recovery_auto"]
+[label="recovery_autonomous"]
 ;
 }
