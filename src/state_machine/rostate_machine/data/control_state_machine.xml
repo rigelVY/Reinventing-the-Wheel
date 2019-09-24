@@ -1,0 +1,15 @@
+<state_machine>
+    <init_state name="autonomous_driving"/>
+    <state_machine_name name="control_state_machine"/>
+
+    <callback tag="autonomous_driving" when="always" states="autonomous_driving"/>
+    <callback tag="manual_driving" when="always" states="manual_driving"/>
+    <callback tag="stopping" when="always" states="stopping"/>
+
+    <transition from = "manual_driving" to="autonomous_driving" name="system_bringup"/>
+    <transition from = "manual_driving" to="stopping" name="stopped"/>
+    <transition from = "autonomous_driving" to="manual_driving" name="manual_override"/>
+    <transition from = "autonomous_driving" to="stopping" name="stopped"/>
+    <transition from = "stopping" to="manual_driving" name="recovery_manual"/>
+    <transition from = "stopping" to="autonomous_driving" name="recovery_auto"/>
+</state_machine>
