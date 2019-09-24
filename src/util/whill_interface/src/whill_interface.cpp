@@ -41,7 +41,6 @@ boost::optional<rostate_machine::Event> WhillInterface::AutonomousStateCallback_
     if(mode_ == "simulation")
     {
         twist_pub_.publish(sub_twist_msg_);
-        // printf("sub_twist_msg_.linear.x: %f\n", sub_twist_msg_.linear.x);
     }
     else if(mode_ == "real")
     {
