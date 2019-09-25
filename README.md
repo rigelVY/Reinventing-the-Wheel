@@ -32,7 +32,7 @@ roslaunch rtw_gazebo rtw_gazebo.launch
 
 2. launch joy node.
 ```
-rosrun joy joy_node
+rosrun joy joy_node _autorepeat_rate:=30
 ```
 
 3. launch the RTW node.
@@ -52,7 +52,7 @@ roslaunch ros_whill ros_whill.launch
 
 2. launch joy node.
 ```
-rosrun joy joy_node
+rosrun joy joy_node _autorepeat_rate:=30
 ```
 
 3. launch Rviz.
