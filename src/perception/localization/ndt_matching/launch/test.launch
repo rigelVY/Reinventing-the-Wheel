@@ -1,37 +1,20 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="trans_eps" default="0.01" />
-    <arg name="step_size" default="0.1" />
-    <arg name="ndt_res" default="1.0" />
-    <arg name="max_iter" default="30" />
-    <arg name="lidar_frame" default="base_link" />
-    <arg name="map_frame" default="map" />
-    <arg name="ndt_pose_topic" default="ndt_pose" />
-    <arg name="map_topic" default="points_map" />
-    <arg name="points_topic" default="filtered_points" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rtw_gazebo)/rviz/rtw_default.rviz" required="true" />
 
-    <node pkg="ndt_matching" type="ndt_matching_node" name="ndt_matching_node" output="screen" respawn="true" >
-        <param name="trans_eps" value="$(arg trans_eps)" />
-        <param name="step_size" value="$(arg step_size)" />
-        <param name="ndt_res" value="$(arg ndt_res)" />
-        <param name="max_iter" value="$(arg max_iter)" />
-        <param name="lidar_frame" value="$(arg lidar_frame)" />
-        <param name="map_frame" value="$(arg map_frame)" />
-        <param name="ndt_pose_topic" value="$(arg ndt_pose_topic)"/>
-        <param name="map_topic" value="$(arg map_topic)"/>
-        <param name="points_topic" value="$(arg points_topic)"/>
-    </node>
+  <node name="points_map_loader_node" pkg="points_map_loader" type="points_map_loader_node" output="screen" respawn="true" >
+    <param name="map_path" value="$(find points_map_loader)/../../../data/pcd/room_scan1.pcd" />
+    <param name="map_frame" value="map" />
+    <param name="points_map_topic" value="points_map" />
+  </node>
 
-    <node name="points_map_loader_node" pkg="points_map_loader" type="points_map_loader_node" output="screen" respawn="true" >
-      <param name="map_path" value="$(find points_map_loader)/../../../data/pcd/room_scan1.pcd" />
-      <param name="map_frame" value="map" />
-      <param name="points_map_topic" value="points_map" />
-    </node>
+  <node name="points_raw_loader_node" pkg="points_map_loader" type="points_map_loader_node" output="screen" respawn="true" >
+    <param name="map_path" value="$(find points_map_loader)/../../../data/pcd/room_scan2.pcd" />
+    <param name="map_frame" value="base_link" />
+    <param name="points_map_topic" value="velodyne/points" />
+  </node>
 
-    <node name="points_raw_loader_node" pkg="points_map_loader" type="points_map_loader_node" output="screen" respawn="true" >
-      <param name="map_path" value="$(find points_map_loader)/../../../data/pcd/room_scan2.pcd" />
-      <param name="map_frame" value="base_link" />
-      <param name="points_map_topic" value="points_raw" />
-    </node>
+  <include file="$(find approximate_voxel_filter)/launch/approximate_voxel_filter.launch" />
+  <include file="$(find ndt_matching)/launch/ndt_matching.launch" />
 
 </launch>

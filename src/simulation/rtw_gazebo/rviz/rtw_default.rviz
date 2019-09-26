@@ -7,7 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
-        - /Path1/Offset1
+        - /Waypoints Path1/Offset1
       Splitter Ratio: 0.5
     Tree Height: 314
   - Class: rviz/Selection
@@ -129,8 +129,6 @@ Visualization Manager:
           Value: false
         left_wheel_link:
           Value: false
-        odom:
-          Value: true
         right_wheel_link:
           Value: false
         velodyne:
@@ -143,23 +141,22 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            ball_link:
+        base_link:
+          ball_link:
+            {}
+          body_link:
+            {}
+          camera_link:
+            {}
+          imu_link:
+            {}
+          left_wheel_link:
+            {}
+          right_wheel_link:
+            {}
+          velodyne_base_link:
+            velodyne:
               {}
-            body_link:
-              {}
-            camera_link:
-              {}
-            imu_link:
-              {}
-            left_wheel_link:
-              {}
-            right_wheel_link:
-              {}
-            velodyne_base_link:
-              velodyne:
-                {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
@@ -192,7 +189,7 @@ Visualization Manager:
       Max Intensity: 0
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: PointCloud2
+      Name: Velodyne Points
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -244,7 +241,7 @@ Visualization Manager:
       Length: 0.30000001192092896
       Line Style: Billboards
       Line Width: 0.019999999552965164
-      Name: Path
+      Name: Waypoints Path
       Offset:
         X: 0
         Y: 0
@@ -256,6 +253,36 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic: /waypoints_raw
       Unreliable: false
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: Points Map
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic: /points_map
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
@@ -285,25 +312,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 11.168530464172363
+      Distance: 25.828126907348633
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.6080479621887207
-        Y: -1.2123874425888062
-        Z: 0.13648127019405365
+        X: 2.278651714324951
+        Y: 0.44746747612953186
+        Z: -0.7931498885154724
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.34539881348609924
+      Pitch: 0.6153982281684875
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.6835813522338867
+      Yaw: 4.018579483032227
     Saved: ~
 Window Geometry:
   Displays:

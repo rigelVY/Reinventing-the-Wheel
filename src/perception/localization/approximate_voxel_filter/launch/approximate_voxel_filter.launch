@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="voxel_leaf_size" default="0.9" />
+  <arg name="voxel_leaf_size" default="0.8" />
   <arg name="filtered_points_topic" default="filtered_points" />
-  <arg name="points_topic" default="points_raw" />
+  <arg name="points_topic" default="velodyne/points" />
 
   <node name="approximate_voxel_filter_node" pkg="approximate_voxel_filter" type="approximate_voxel_filter_node" output="screen" respawn="true" >
     <param name="voxel_leaf_size" value="$(arg voxel_leaf_size)" />

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="map_path" default="$(find points_map_loader)/../../../data/pcd/room_scan1.pcd" />
+  <arg name="map_path" default="$(find points_map_loader)/../../../data/pcd/test_field_01.pcd" />
   <arg name="map_frame" default="map" />
   <arg name="points_map_topic" default="points_map" />
 

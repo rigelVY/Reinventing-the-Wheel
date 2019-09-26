@@ -11,7 +11,7 @@ NdtMatching::NdtMatching(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(
   pnh_.param<std::string>("ndt_pose_topic", ndt_pose_topic_, "ndt_pose");
   pnh_.param<std::string>("map_topic", map_topic_, "points_map");
   pnh_.param<std::string>("points_topic", points_topic_, "filtered_points");
-  ndt_pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 1);
+  ndt_pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 10);
   map_sub_ = nh_.subscribe(map_topic_, 10, &NdtMatching::MapCallback_, this);
   initialpose_sub_ = nh_.subscribe("initialpose", 10, &NdtMatching::InitialposeCallback_, this);
   filtered_points_sub_ = nh_.subscribe(points_topic_, 10, &NdtMatching::PointsCallback_, this);
