@@ -38,7 +38,6 @@ private:
     void MapCallback_(const sensor_msgs::PointCloud2::ConstPtr& msg);
     void InitialposeCallback_(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& msg);
     void PointsCallback_(const sensor_msgs::PointCloud2::ConstPtr& msg);
-    void PublishNDTPose_(void);
 
     ros::NodeHandle nh_;
     ros::NodeHandle pnh_;
