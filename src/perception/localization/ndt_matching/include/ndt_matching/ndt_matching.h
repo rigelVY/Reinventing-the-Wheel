@@ -49,6 +49,7 @@ private:
     double max_iter_;
     std::string lidar_frame_;
     std::string map_frame_;
+    std::string odom_frame_;
     std::string points_topic_;
     std::string map_topic_;
     std::string ndt_pose_topic_;
@@ -67,7 +68,7 @@ private:
     unsigned int points_map_num_;
     
     Eigen::Matrix4f init_guess_;
-    geometry_msgs::Pose initial_pose_;
+    geometry_msgs::Pose predict_pose_;
 };
 
 #endif  //NDT_MATCHING_NDT_MATCHING_H_INCLUDED

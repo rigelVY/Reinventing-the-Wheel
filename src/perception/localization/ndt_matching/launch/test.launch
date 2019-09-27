@@ -10,7 +10,7 @@
 
   <node name="points_raw_loader_node" pkg="points_map_loader" type="points_map_loader_node" output="screen" respawn="true" >
     <param name="map_path" value="$(find points_map_loader)/../../../data/pcd/room_scan2.pcd" />
-    <param name="map_frame" value="base_link" />
+    <param name="map_frame" value="velodyne" />
     <param name="points_map_topic" value="velodyne/points" />
   </node>
 

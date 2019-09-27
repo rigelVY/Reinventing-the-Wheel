@@ -8,6 +8,7 @@ NdtMatching::NdtMatching(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(
   pnh_.param<double>("max_iter", max_iter_, 30);
   pnh_.param<std::string>("lidar_frame", lidar_frame_, "velodyne");
   pnh_.param<std::string>("map_frame", map_frame_, "map");
+  pnh_.param<std::string>("odom_frame", odom_frame_, "odom");
   pnh_.param<std::string>("ndt_pose_topic", ndt_pose_topic_, "ndt_pose");
   pnh_.param<std::string>("map_topic", map_topic_, "points_map");
   pnh_.param<std::string>("points_topic", points_topic_, "filtered_points");
@@ -59,7 +60,7 @@ void NdtMatching::InitialposeCallback_(const geometry_msgs::PoseWithCovarianceSt
   try
   {
     ros::Time now = ros::Time(0);
-    listener.waitForTransform(map_frame_, msg->header.frame_id, now, ros::Duration(10.0));
+    listener.waitForTransform(map_frame_, msg->header.frame_id, now, ros::Duration(5.0));
     listener.lookupTransform(map_frame_, msg->header.frame_id, now, transform);
   }
   catch (tf::TransformException& ex)
@@ -67,25 +68,21 @@ void NdtMatching::InitialposeCallback_(const geometry_msgs::PoseWithCovarianceSt
     ROS_ERROR("%s", ex.what());
   }
 
-  initial_pose_.position.x = msg->pose.pose.position.x + transform.getOrigin().x();
-  initial_pose_.position.y = msg->pose.pose.position.y + transform.getOrigin().y();
-  initial_pose_.position.z = msg->pose.pose.position.z + transform.getOrigin().z();
+  predict_pose_.position.x = msg->pose.pose.position.x + transform.getOrigin().x();
+  predict_pose_.position.y = msg->pose.pose.position.y + transform.getOrigin().y();
+  predict_pose_.position.z = msg->pose.pose.position.z + transform.getOrigin().z();
+  predict_pose_.orientation = msg->pose.pose.orientation;
 
-  double initial_pose_roll, initial_pose_pitch, initial_pose_yaw;
-  tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z,
-                   msg->pose.pose.orientation.w);
-  tf::Matrix3x3 m(q);
-  m.getRPY(initial_pose_roll, initial_pose_pitch, initial_pose_yaw);
-  Eigen::AngleAxisf init_rotation_x(initial_pose_roll, Eigen::Vector3f::UnitX());
-  Eigen::AngleAxisf init_rotation_y(initial_pose_pitch, Eigen::Vector3f::UnitY());
-  Eigen::AngleAxisf init_rotation_z(initial_pose_yaw, Eigen::Vector3f::UnitZ());
-  Eigen::Translation3f init_translation(initial_pose_.position.x, initial_pose_.position.y, initial_pose_.position.z);
-  init_guess_ = (init_translation * init_rotation_x * init_rotation_y * init_rotation_z).matrix();
-
-  // Set initial alignment estimate found using robot odometry.
-  // Eigen::AngleAxisf init_rotation (0.6931, Eigen::Vector3f::UnitZ ());
-  // Eigen::Translation3f init_translation (1.79387, 0.720047, 0);
-  // init_guess_ = (init_translation * init_rotation).matrix ();
+  // double initial_pose_roll, initial_pose_pitch, initial_pose_yaw;
+  // tf::Quaternion q(initial_pose_.orientation.x, initial_pose_.orientation.y, initial_pose_.orientation.z,
+  //                  initial_pose_.orientation.w);
+  // tf::Matrix3x3 m(q);
+  // m.getRPY(initial_pose_roll, initial_pose_pitch, initial_pose_yaw);
+  // Eigen::AngleAxisf init_rotation_x(initial_pose_roll, Eigen::Vector3f::UnitX());
+  // Eigen::AngleAxisf init_rotation_y(initial_pose_pitch, Eigen::Vector3f::UnitY());
+  // Eigen::AngleAxisf init_rotation_z(initial_pose_yaw, Eigen::Vector3f::UnitZ());
+  // Eigen::Translation3f init_translation(initial_pose_.position.x, initial_pose_.position.y, initial_pose_.position.z);
+  // init_guess_ = (init_translation * init_rotation_x * init_rotation_y * init_rotation_z).matrix();
 
   init_pos_set_ = 1;
 }
@@ -103,6 +100,22 @@ void NdtMatching::PublishNDTPose_(void)
   {
     if (map_loaded_ == 1 && init_pos_set_ == 1)
     {
+      double predict_pose_roll, predict_pose_pitch, predict_pose_yaw;
+      tf::Quaternion q(predict_pose_.orientation.x, predict_pose_.orientation.y, predict_pose_.orientation.z,
+                       predict_pose_.orientation.w);
+      tf::Matrix3x3 m(q);
+      m.getRPY(predict_pose_roll, predict_pose_pitch, predict_pose_yaw);
+      Eigen::AngleAxisf init_rotation_x(predict_pose_roll, Eigen::Vector3f::UnitX());
+      Eigen::AngleAxisf init_rotation_y(predict_pose_pitch, Eigen::Vector3f::UnitY());
+      Eigen::AngleAxisf init_rotation_z(predict_pose_yaw, Eigen::Vector3f::UnitZ());
+      Eigen::Translation3f init_translation(predict_pose_.position.x, predict_pose_.position.y, predict_pose_.position.z);
+      init_guess_ = (init_translation * init_rotation_x * init_rotation_y * init_rotation_z).matrix();
+
+      // Set initial alignment estimate found using robot odometry.
+      // Eigen::AngleAxisf init_rotation (0.6931, Eigen::Vector3f::UnitZ ());
+      // Eigen::Translation3f init_translation (1.79387, 0.720047, 0);
+      // init_guess_ = (init_translation * init_rotation).matrix ();
+
       ros::Time current_scan_time = filtered_points_.header.stamp;
 
       pcl::PointCloud<pcl::PointXYZ> filtered_scan;
@@ -145,11 +158,25 @@ void NdtMatching::PublishNDTPose_(void)
       ndt_pose.orientation.y = ndt_q.y();
       ndt_pose.orientation.z = ndt_q.z();
       ndt_pose.orientation.w = ndt_q.w();
-      
+
+      tf::TransformListener listener;
+      tf::StampedTransform tf_odom_to_lidar;
+      try
+      {
+        ros::Time now = ros::Time(0);
+        listener.waitForTransform(odom_frame_, lidar_frame_, now, ros::Duration(1.0));
+        listener.lookupTransform(odom_frame_, lidar_frame_, now, tf_odom_to_lidar);
+      }
+      catch (tf::TransformException& ex)
+      {
+        ROS_ERROR("%s", ex.what());
+      }
+
       static tf::TransformBroadcaster br;
-      tf::Transform transform;
-      poseMsgToTF(ndt_pose, transform);
-      br.sendTransform(tf::StampedTransform(transform, current_scan_time, map_frame_, lidar_frame_));
+      tf::Transform tf_map_to_lidar, tf_delta;
+      poseMsgToTF(ndt_pose, tf_map_to_lidar);
+      tf_delta = tf_odom_to_lidar.inverseTimes(tf_map_to_lidar);
+      br.sendTransform(tf::StampedTransform(tf_delta, current_scan_time, map_frame_, odom_frame_));
 
       geometry_msgs::PoseStamped ndt_pose_msg;
       ndt_pose_msg.header.frame_id = map_frame_;
@@ -157,6 +184,8 @@ void NdtMatching::PublishNDTPose_(void)
       ndt_pose_msg.pose = ndt_pose;
 
       ndt_pose_pub_.publish(ndt_pose_msg);
+
+      predict_pose_ = ndt_pose;
     }
     loop_rate.sleep();
   }

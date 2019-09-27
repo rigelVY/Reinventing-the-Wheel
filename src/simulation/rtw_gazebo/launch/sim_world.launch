@@ -22,7 +22,7 @@
 
   <!-- Publish tf (wheel odometry data or the exact position in gazebo) -->
   <group if="$(eval odom_data=='wheel')">
-    <param name="/roomba/diff_drive_controller/enable_odom_tf" value="false" />
+    <param name="/roomba/diff_drive_controller/enable_odom_tf" value="true" />
   </group>
 
   <group if="$(eval odom_data=='gazebo')">
