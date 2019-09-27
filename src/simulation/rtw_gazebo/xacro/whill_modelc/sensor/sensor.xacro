@@ -3,13 +3,14 @@
 
   <!-- Include sensor macros -->
   <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/sensor/camera/camera.xacro" />
+  <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/sensor/gps/gps.xacro" />
   <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/sensor/imu/imu.xacro" />
   <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/sensor/2d_lidar/2d_lidar.xacro" />
   <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/sensor/3d_lidar/3d_lidar.xacro" />
 
   <!-- Enable Flag -->
   <xacro:arg name="camera_enabled" default="true" />
-  <!-- <xacro:arg name="gps_enabled" default="true" /> -->
+  <xacro:arg name="gps_enabled" default="true" />
   <xacro:arg name="imu_enabled" default="true" />
   <xacro:arg name="2dlidar_enabled" default="false" />
   <xacro:arg name="3dlidar_enabled" default="true" />
@@ -20,9 +21,9 @@
     <xacro:camera_macro prefix="camera" parent="base_link" xyz="-0.05 0 0.3"/>
   </xacro:if>
   <!-- GPS -->
-  <!-- <xacro:if value="$(arg gps_enabled)">
-    <xacro:gps_gazebo_v0/>
-  </xacro:if> -->
+  <xacro:if value="$(arg gps_enabled)">
+    <xacro:gps_macro prefix="gps" parent="base_link" xyz="0 0 0"/>
+  </xacro:if>
   <!-- IMU -->
   <xacro:if value="$(arg imu_enabled)">
     <xacro:imu_macro prefix="imu" parent="base_link" xyz="0.02 0 0.05" rpy="0 0.85521133347 3.14159265359"/>
