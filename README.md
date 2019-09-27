@@ -8,6 +8,7 @@ ROS: Melodic
 install dependencies
 ```
 sudo apt install ros-melodic-velodyne*
+sudo apt install ros-melodic-hector-gazebo-plugins
 ```
 
 clone & build of Reinventing-the-Wheel package
