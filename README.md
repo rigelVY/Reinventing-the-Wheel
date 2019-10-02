@@ -59,7 +59,7 @@ rosrun joy joy_node _autorepeat_rate:=30
 ```
 rosrun rviz rviz
 ```
-you can use Rviz configuration file"(path to RTW)/src/simulation/rtw_gazebo/rviz/rtw_default.rviz".
+you can use Rviz configuration file at "(path to RTW)/src/simulation/rtw_gazebo/rviz/rtw_default.rviz".
 
 4. launch the RTW node for manipulating WHILL.
 ```
