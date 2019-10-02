@@ -65,5 +65,6 @@ rosrun rviz rviz
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
+roslaunch rostate_machine control_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=real
 ```
