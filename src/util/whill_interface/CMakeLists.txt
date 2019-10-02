@@ -9,9 +9,12 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   roscpp
+  rostate_machine
 )
 
-catkin_package()
+catkin_package(
+  INCLUDE_DIRS include
+)
 
 include_directories(
   include
@@ -19,4 +22,5 @@ include_directories(
 )
 
 add_executable(whill_interface_node src/whill_interface_node.cpp src/whill_interface.cpp)
+add_dependencies(whill_interface_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(whill_interface_node ${catkin_LIBRARIES})
