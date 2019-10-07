@@ -1,0 +1,8 @@
+grid_map_topic: /grid_map
+grid_map_visualizations:
+  - name: occgrid_map
+    type: occupancy_grid
+    params:
+     layer: occgrid_map
+     data_min: 0.5
+     data_max: -0.5
