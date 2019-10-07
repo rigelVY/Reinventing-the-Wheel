@@ -5,7 +5,7 @@
   <arg name="odom_data" default="wheel" />
   <arg name="model" default="whill_modelc" />
 
-
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
   <include file="$(find rtw_gazebo)/launch/sim_world.launch">  
     <arg name="world" value="$(arg world)"/>
