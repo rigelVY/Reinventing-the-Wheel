@@ -1,6 +1,6 @@
 #include <localmap_2d/localmap_2d.h>
 
-LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh),map_(grid_map::GridMap({"occgrid_map"}))
+LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh),map_(grid_map::GridMap({"occgrid_map", "cost_map"}))
 {
     pnh_.param<std::string>("data_type", data_type_, "LaserScan");
     pnh_.param<std::string>("sensor_frame", sensor_frame_, "lidar_link");
@@ -28,6 +28,7 @@ LocalMap2D::~LocalMap2D()
 void LocalMap2D::LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg)
 {
     LocalMap2D::LaserScanToGridMap_(msg);
+    LocalMap2D::GridMapToCostMap_();
     return;
 }
 
@@ -51,11 +52,22 @@ void LocalMap2D::LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr lase
     return;
 }
 
+void LocalMap2D::GridMapToCostMap_(void)
+{
+    for (grid_map::GridMapIterator it(map_); !it.isPastEnd(); ++it) 
+    {
+        grid_map::Position position;
+        map_.getPosition(*it, position);
+        map_.at("cost_map", *it) = -0.04 + 0.2 * std::sin(5.0 * position.y()) * position.x();
+    }
+}
+
 void LocalMap2D::PublishCmdVel_(void)
 {
-    ros::Rate loop_rate(30);
+    ros::Rate loop_rate(10);
     while(ros::ok())
     {
+        map_.setTimestamp(ros::Time::now().toNSec());
         grid_map_msgs::GridMap message;
         grid_map::GridMapRosConverter::toMessage(map_, message);
         grid_map_pub_.publish(message);

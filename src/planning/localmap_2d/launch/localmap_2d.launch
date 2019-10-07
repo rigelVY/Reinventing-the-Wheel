@@ -6,7 +6,7 @@
   <arg name="grid_map_topic" default="/grid_map" />
   <arg name="map_width" default="15.0" />
   <arg name="map_height" default="15.0" />
-  <arg name="resolution" default="0.05" />
+  <arg name="resolution" default="0.1" />
 
   <node name="localmap_2d_node" pkg="localmap_2d" type="localmap_2d_node" output="screen" respawn="true" >
     <param name="data_type" value="$(arg data_type)" />
