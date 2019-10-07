@@ -38,6 +38,7 @@ rosrun joy joy_node _autorepeat_rate:=30
 
 3. launch the RTW node.
 ```
+roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
@@ -64,6 +65,7 @@ you can use Rviz configuration file at "(path to RTW)/src/simulation/rtw_gazebo/
 
 4. launch the RTW node for manipulating WHILL.
 ```
+roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
