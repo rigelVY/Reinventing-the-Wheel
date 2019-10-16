@@ -9,7 +9,6 @@ ROS: Melodic
 ```
 sudo apt install ros-melodic-velodyne*
 sudo apt install ros-melodic-hector-gazebo-plugins
-sudo apt install ros-$ROS_DISTRO-grid-map
 ```
 
 2. clone & build of Reinventing-the-Wheel package
