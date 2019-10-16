@@ -9,7 +9,6 @@ ROS: Melodic
 ```
 sudo apt install ros-$ROS_DISTRO-velodyne*
 sudo apt install ros-$ROS_DISTRO-hector-gazebo-plugins
-sudo apt install ros-$ROS_DISTRO-grid-map
 sudo apt install ros-$ROS_DISTRO-gmapping ros-$ROS_DISTRO-amcl ros-$ROS_DISTRO-map-server 
 ```
 
