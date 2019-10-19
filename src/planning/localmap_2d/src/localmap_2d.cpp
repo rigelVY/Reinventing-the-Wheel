@@ -9,6 +9,7 @@ LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pn
     pnh_.param<double>("map_width", map_width_, 1.2);
     pnh_.param<double>("map_height", map_height_, 2.0);
     pnh_.param<double>("resolution", resolution_, 0.05);
+    pnh_.param<double>("costmap_grad", costmap_grad_, 1.0);
     grid_map_pub_ = nh_.advertise<grid_map_msgs::GridMap>(grid_map_topic_, 1);
     laser_sub_ = nh_.subscribe(laser_topic_, 1, &LocalMap2D::LaserScanCallback_, this);
     boost::thread publish_thread(boost::bind(&LocalMap2D::PublishCmdVel_, this));
@@ -27,6 +28,9 @@ LocalMap2D::~LocalMap2D()
 
 void LocalMap2D::LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg)
 {
+    map_.clearAll(); // initialize the map
+    obstacles_index_.clear();
+    obstacles_index_.reserve((int)(map_width_*map_height_/(resolution_*resolution_)));
     LocalMap2D::LaserScanToGridMap_(msg);
     LocalMap2D::GridMapToCostMap_();
     return;
@@ -34,7 +38,6 @@ void LocalMap2D::LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg)
 
 void LocalMap2D::LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr laser_scan)
 {
-    map_.clearAll(); // initialize the map
     for(int i=0; i<laser_scan->ranges.size(); i++)
     {
         double angle = laser_scan->angle_min + laser_scan->angle_increment * i;
@@ -44,10 +47,12 @@ void LocalMap2D::LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr lase
         grid_map::Position position;
         position.x() = range * cos(angle);
         position.y() = range * sin(angle);
-        if(map_width_/2 < abs(position.x()) || map_height_/2 < abs(position.y())) continue;
+        if(map_width_/2.0 < abs(position.x()) || map_height_/2.0 < abs(position.y())) continue;
         grid_map::Index index;
         map_.getIndex(position, index);
         map_.at("occgrid_map", index) = 0.5;
+
+        obstacles_index_.emplace_back(index);
     }
     return;
 }
@@ -58,8 +63,18 @@ void LocalMap2D::GridMapToCostMap_(void)
     {
         grid_map::Position position;
         map_.getPosition(*it, position);
-        map_.at("cost_map", *it) = -0.04 + 0.2 * std::sin(5.0 * position.y()) * position.x();
+
+        double obs_dist_square, nearest_obs_dist_square = 100.0;
+        grid_map::Position obs_pos;
+        for(int i=0; i<obstacles_index_.size(); i++)
+        {
+            map_.getPosition(obstacles_index_[i], obs_pos);
+            obs_dist_square = std::pow((obs_pos.x() - position.x()), 2) + std::pow((obs_pos.y() - position.y()), 2);
+            if(obs_dist_square < nearest_obs_dist_square) nearest_obs_dist_square = obs_dist_square;
+        }
+        map_.at("cost_map", *it) = 0.5 * exp(-nearest_obs_dist_square / std::pow(costmap_grad_, 2));
     }
+    return;
 }
 
 void LocalMap2D::PublishCmdVel_(void)

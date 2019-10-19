@@ -4,9 +4,10 @@
   <arg name="sensor_frame" default="lidar_link" />
   <arg name="laser_topic" default="/lidar_link/scan" />
   <arg name="grid_map_topic" default="/grid_map" />
-  <arg name="map_width" default="15.0" />
-  <arg name="map_height" default="15.0" />
+  <arg name="map_width" default="10.0" />
+  <arg name="map_height" default="10.0" />
   <arg name="resolution" default="0.1" />
+  <arg name="costmap_grad" default="1.0" />
 
   <node name="localmap_2d_node" pkg="localmap_2d" type="localmap_2d_node" output="screen" respawn="true" >
     <param name="data_type" value="$(arg data_type)" />
@@ -16,6 +17,7 @@
     <param name="map_width" value="$(arg map_width)" />
     <param name="map_height" value="$(arg map_height)" />
     <param name="resolution" value="$(arg resolution)" />
+    <param name="costmap_grad" value="$(arg costmap_grad)" />
   </node>
 
   <!-- Launch the grid map visualizer -->
