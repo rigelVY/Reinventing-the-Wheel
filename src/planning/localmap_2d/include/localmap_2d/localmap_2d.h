@@ -20,7 +20,7 @@ private:
     void LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg);
     void LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr laser_scan);
     void GridMapToCostMap_(void);
-    void PublishCmdVel_(void);
+    void PublishLocalMap_(void);
 
     ros::NodeHandle nh_;
     ros::NodeHandle pnh_;

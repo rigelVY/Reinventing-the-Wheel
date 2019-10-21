@@ -9,6 +9,9 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   roscpp
   tf
+  grid_map_core
+  grid_map_ros
+  grid_map_msgs
 )
 
 catkin_package()
