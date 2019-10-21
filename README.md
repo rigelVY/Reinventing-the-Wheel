@@ -39,6 +39,8 @@ rosrun joy joy_node _autorepeat_rate:=30
 
 3. launch the RTW node.
 ```
+rosrun map_server map_server src/data/map/mymap.yaml
+rosrun amcl amcl scan:=lidar_link/scan
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
