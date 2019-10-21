@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="map_frame" default="/map" />
   <arg name="twist_topic" default="/cmd_vel" />
   <arg name="path_topic" default="/waypoints_raw" />
   <arg name="current_pose_topic" default="/current_pose" />
@@ -14,6 +15,7 @@
   <arg name="weight_angle" default="1.0" />
 
   <node name="dwa_node" pkg="dwa" type="dwa_node" output="screen" respawn="true" >
+    <param name="map_frame" value="$(arg map_frame)" />
     <param name="twist_topic" value="$(arg twist_topic)" />
     <param name="path_topic" value="$(arg path_topic)" />
     <param name="current_pose_topic" value="$(arg current_pose_topic)" />

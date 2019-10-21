@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /Waypoints Path1/Offset1
+        - /DWA Opt Path1/Status1
       Splitter Ratio: 0.5
     Tree Height: 314
   - Class: rviz/Selection
@@ -159,28 +160,27 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          {}
-        odom:
-          base_link:
-            base_floor:
-              footrest_link:
+          odom:
+            base_link:
+              base_floor:
+                footrest_link:
+                  {}
+                frontwheel_left:
+                  {}
+                frontwheel_right:
+                  {}
+                left_wheel_link:
+                  {}
+                right_wheel_link:
+                  {}
+              camera_link:
                 {}
-              frontwheel_left:
+              gps_link:
                 {}
-              frontwheel_right:
+              imu_link:
                 {}
-              left_wheel_link:
+              lidar_link:
                 {}
-              right_wheel_link:
-                {}
-            camera_link:
-              {}
-            gps_link:
-              {}
-            imu_link:
-              {}
-            lidar_link:
-              {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
@@ -291,7 +291,7 @@ Visualization Manager:
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: costmap
-      Draw Behind: false
+      Draw Behind: true
       Enabled: true
       Name: Local Cost Map
       Topic: /grid_map_visualization/cost_map
@@ -324,7 +324,7 @@ Visualization Manager:
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: map
-      Draw Behind: false
+      Draw Behind: true
       Enabled: true
       Name: Map
       Topic: /map
@@ -358,7 +358,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0
+      Angle: -0.43500036001205444
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -368,7 +368,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 54.336307525634766
+      Scale: 80.04658508300781
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
       X: 0.5651451945304871

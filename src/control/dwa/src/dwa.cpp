@@ -2,6 +2,7 @@
 
 DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
 {
+    pnh_.param<std::string>("map_frame", map_frame_, "map");
     pnh_.param<std::string>("twist_topic", twist_topic_, "cmd_vel");
     pnh_.param<std::string>("path_topic", path_topic_, "waypoints_raw");
     pnh_.param<std::string>("current_pose_topic", current_pose_topic_, "current_pose");
@@ -85,37 +86,38 @@ std::vector<std::vector<DWA::path_point>> DWA::CreateCandidatePaths_(double dt, 
 
 double DWA::ObstacleCost_(std::vector<DWA::path_point> path)
 {
-    tf::TransformListener listener;
-    tf::StampedTransform tf_odom_to_lidar;
-    try
-    {
-        ros::Time now = ros::Time(0);
-        listener.waitForTransform("odom", "lidar_link", now, ros::Duration(5.0));
-        listener.lookupTransform("odom", "lidar_link", now, tf_odom_to_lidar);
-    }
-    catch (tf::TransformException& ex)
-    {
-        ROS_ERROR("%s", ex.what());
-    }
+    // tf::TransformListener listener;
+    // tf::StampedTransform tf_map_to_lidar;
+    // try
+    // {
+    //     ros::Time now = ros::Time(0);
+    //     listener.waitForTransform(map_frame_, "lidar_link", now, ros::Duration(5.0));
+    //     listener.lookupTransform(map_frame_, "lidar_link", now, tf_map_to_lidar);
+    // }
+    // catch (tf::TransformException& ex)
+    // {
+    //     ROS_ERROR("%s", ex.what());
+    // }
 
-    grid_map::Position base_position;
-    base_position.x() = tf_odom_to_lidar.getOrigin().x();
-    base_position.y() = tf_odom_to_lidar.getOrigin().y();
+    // grid_map::Position base_position;
+    // base_position.x() = tf_map_to_lidar.getOrigin().x();
+    // base_position.y() = tf_map_to_lidar.getOrigin().y();
 
     double worst_cost = 0.0;
 
     for(int i=0; i<path.size(); i++)
     {
         grid_map::Position position;
-        position.x() = path[i].x - base_position.x();
-        position.y() = path[i].y - base_position.y();
+        // position.x() = path[i].x - base_position.x();
+        // position.y() = path[i].y - base_position.y();
+        position.x() = path[i].x - current_pose_.pose.position.x;
+        position.y() = path[i].y - current_pose_.pose.position.y;
         double cost = map_.atPosition("cost_map", position) * 2.0; // multiple 2.0 for normalized
         if(worst_cost < cost) worst_cost = cost;
     }
 
-    printf("worst cost; %f\n", worst_cost);
+    // printf("worst cost; %f\n", worst_cost);
     return worst_cost;
-    // return 0.0;
 }
 
 double DWA::LinearVelCost_(double linear_vel)
@@ -133,7 +135,7 @@ void DWA::PublishOptimizedPath_(std::vector<DWA::path_point> opt_path)
     nav_msgs::Path path_points;
     ros::Time current_time = ros::Time::now();
     path_points.header.stamp = current_time;
-    path_points.header.frame_id = "odom";
+    path_points.header.frame_id = map_frame_;
 
     for(int i=0; i<opt_path.size(); i++)
     {
@@ -148,7 +150,7 @@ void DWA::PublishOptimizedPath_(std::vector<DWA::path_point> opt_path)
         path_point.pose.orientation.w = quat.w;
 
         path_point.header.stamp = current_time;
-        path_point.header.frame_id = "odom";
+        path_point.header.frame_id = map_frame_;
         path_points.poses.push_back(path_point);
     }
 
@@ -168,7 +170,6 @@ double DWA::EvaluatePath_(double dt, double move_time)
     {
         double obs_cost, vel_cost, angle_cost, total_cost;
         obs_cost = DWA::ObstacleCost_(paths[i]);
-        // obs_cost = 0.0;
         vel_cost = DWA::LinearVelCost_(paths[i][0].lin_v);
         angle_cost = DWA::HeadingGoalCost_(paths[i].back().theta);   
 
@@ -191,7 +192,7 @@ double DWA::EvaluatePath_(double dt, double move_time)
 
 void DWA::PublishCmdVel_(void)
 {
-    ros::Rate loop_rate(20);
+    ros::Rate loop_rate(10);
     while(ros::ok())
     {
         if(!current_pose_received_) continue;
@@ -215,7 +216,7 @@ void DWA::PublishCmdVel_(void)
         target_relative_dist_ = relative_dist;
         target_relative_angle_ = relative_angle;
 
-        double dt = 0.02, move_time = 0.3;
+        double dt = 0.02, move_time = 0.4;
         DWA::EvaluatePath_(dt, move_time);
 
         geometry_msgs::Twist cmd_vel;

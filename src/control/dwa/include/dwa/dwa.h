@@ -45,6 +45,7 @@ private:
     ros::NodeHandle nh_;
     ros::NodeHandle pnh_;
     
+    std::string map_frame_;
     std::string twist_topic_;
     std::string path_topic_;
     std::string current_pose_topic_;
