@@ -12,6 +12,9 @@ DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
     pnh_.param<double>("max_angular_vel", max_angular_vel_, 0.5);
     pnh_.param<double>("min_angular_vel", min_angular_vel_, -0.5);
     pnh_.param<double>("lookahead_distance", lookahead_dist_, 0.5);
+    pnh_.param<double>("weight_obs", weight_obs_, 1.0);
+    pnh_.param<double>("weight_vel", weight_vel_, 0.3);
+    pnh_.param<double>("weight_angle", weight_angle_, 1.0);
     twist_pub_ = nh_.advertise<geometry_msgs::Twist>(twist_topic_, 1);
     opt_path_pub_ = nh_.advertise<nav_msgs::Path>(opt_path_topic_, 1);
     path_sub_ = nh_.subscribe(path_topic_, 1, &DWA::WaypointsRawCallback_, this);
@@ -111,8 +114,8 @@ double DWA::ObstacleCost_(std::vector<DWA::path_point> path)
     }
 
     printf("worst cost; %f\n", worst_cost);
-    // return worst_cost;
-    return 0.0;
+    return worst_cost;
+    // return 0.0;
 }
 
 double DWA::LinearVelCost_(double linear_vel)
@@ -152,7 +155,7 @@ void DWA::PublishOptimizedPath_(std::vector<DWA::path_point> opt_path)
     opt_path_pub_.publish(path_points);
 }
 
-double DWA::EvaluatePath_(double weight_obs, double weight_vel, double weight_angle, double dt, double move_time)
+double DWA::EvaluatePath_(double dt, double move_time)
 {
     std::vector<std::vector<DWA::path_point>> paths;
     std::vector<DWA::path_point> opt_path;
@@ -164,12 +167,12 @@ double DWA::EvaluatePath_(double weight_obs, double weight_vel, double weight_an
     for(int i=0; i<paths.size(); i++)
     {
         double obs_cost, vel_cost, angle_cost, total_cost;
-        // obs_cost = DWA::ObstacleCost_(paths[i]);
-        obs_cost = 0.0;
+        obs_cost = DWA::ObstacleCost_(paths[i]);
+        // obs_cost = 0.0;
         vel_cost = DWA::LinearVelCost_(paths[i][0].lin_v);
         angle_cost = DWA::HeadingGoalCost_(paths[i].back().theta);   
 
-        total_cost = weight_obs * obs_cost + weight_vel * vel_cost + weight_angle * angle_cost; 
+        total_cost = weight_obs_ * obs_cost + weight_vel_ * vel_cost + weight_angle_ * angle_cost; 
 
         if(total_cost < optimal_cost) 
         {
@@ -201,8 +204,7 @@ void DWA::PublishCmdVel_(void)
         {      
             relative_pos.x = wps_.poses[target_index].pose.position.x - current_pose_.pose.position.x;
             relative_pos.y = wps_.poses[target_index].pose.position.y - current_pose_.pose.position.y;
-            relative_pos.z = wps_.poses[target_index].pose.position.z - current_pose_.pose.position.z;
-            relative_dist = std::sqrt(std::pow(relative_pos.x, 2) + std::pow(relative_pos.y, 2) + std::pow(relative_pos.z, 2));
+            relative_dist = std::sqrt(std::pow(relative_pos.x, 2) + std::pow(relative_pos.y, 2));
             relative_angle = std::atan2(relative_pos.y, relative_pos.x) - tf::getYaw(current_pose_.pose.orientation);
 
             if(std::abs(relative_angle) < M_PI/2)
@@ -213,9 +215,8 @@ void DWA::PublishCmdVel_(void)
         target_relative_dist_ = relative_dist;
         target_relative_angle_ = relative_angle;
 
-        double weight_obs = 1.0, weight_vel = 0.3, weight_angle = 1.0;
         double dt = 0.02, move_time = 0.3;
-        DWA::EvaluatePath_(weight_obs, weight_vel, weight_angle, dt, move_time);
+        DWA::EvaluatePath_(dt, move_time);
 
         geometry_msgs::Twist cmd_vel;
         cmd_vel.linear.x = optimal_linear_vel_;

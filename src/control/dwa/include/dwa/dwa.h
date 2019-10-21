@@ -39,7 +39,7 @@ private:
     double LinearVelCost_(double linear_vel);
     double HeadingGoalCost_(double terminal_angle);
     void PublishOptimizedPath_(std::vector<DWA::path_point> opt_path);
-    double EvaluatePath_(double weight_obs, double weight_vel, double weight_angle, double dt, double move_time);
+    double EvaluatePath_(double dt, double move_time);
     void PublishCmdVel_(void);
 
     ros::NodeHandle nh_;
@@ -55,6 +55,9 @@ private:
     double max_angular_vel_;
     double min_angular_vel_;
     double lookahead_dist_;
+    double weight_obs_;
+    double weight_vel_;
+    double weight_angle_;
 
     nav_msgs::Path wps_;
     geometry_msgs::PoseStamped current_pose_;

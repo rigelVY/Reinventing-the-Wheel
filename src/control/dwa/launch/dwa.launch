@@ -9,6 +9,9 @@
   <arg name="max_angular_vel" default="3.0" />
   <arg name="min_angular_vel" default="-3.0" />
   <arg name="lookahead_distance" default="0.5" />
+  <arg name="weight_obs" default="1.0" />
+  <arg name="weight_vel" default="0.3" />
+  <arg name="weight_angle" default="1.0" />
 
   <node name="dwa_node" pkg="dwa" type="dwa_node" output="screen" respawn="true" >
     <param name="twist_topic" value="$(arg twist_topic)" />
@@ -20,5 +23,8 @@
     <param name="max_angular_vel" value="$(arg max_angular_vel)" />
     <param name="min_angular_vel" value="$(arg min_angular_vel)" />
     <param name="lookahead_distance" value="$(arg lookahead_distance)" />
+    <param name="weight_obs" value="$(arg weight_obs)" />
+    <param name="weight_vel" value="$(arg weight_vel)" />
+    <param name="weight_angle" value="$(arg weight_angle)" />
   </node>
 </launch>
