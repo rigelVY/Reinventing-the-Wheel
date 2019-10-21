@@ -146,6 +146,8 @@ Visualization Manager:
           Value: false
         lidar_link:
           Value: true
+        map:
+          Value: true
         odom:
           Value: true
         right_wheel_link:
@@ -156,6 +158,8 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
+        map:
+          {}
         odom:
           base_link:
             base_floor:
@@ -287,7 +291,7 @@ Visualization Manager:
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: costmap
-      Draw Behind: true
+      Draw Behind: false
       Enabled: true
       Name: Local Cost Map
       Topic: /grid_map_visualization/cost_map
@@ -317,11 +321,21 @@ Visualization Manager:
       Topic: /opt_path_points
       Unreliable: false
       Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: odom
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -344,26 +358,21 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 14.61595630645752
+      Angle: 0
+      Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: -0.2874186933040619
-        Y: -0.9643014073371887
-        Z: -0.6000456809997559
-      Focal Shape Fixed Size: false
-      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.3747962713241577
+      Scale: 54.336307525634766
       Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 3.7103962898254395
+      Value: TopDownOrtho (rviz)
+      X: 0.5651451945304871
+      Y: 0.7563758492469788
     Saved: ~
 Window Geometry:
   Displays:
