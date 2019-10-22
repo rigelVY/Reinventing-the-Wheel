@@ -1,4 +1,4 @@
-grid_map_topic: /grid_map
+grid_map_topic: /local_grid_map
 grid_map_visualizations:
   - name: cost_map
     type: occupancy_grid

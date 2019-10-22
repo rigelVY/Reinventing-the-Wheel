@@ -7,10 +7,6 @@
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <grid_map_msgs/GridMap.h>
 
-//headers in Boost
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
-
 class LocalMap2D
 {
 public:
@@ -20,7 +16,6 @@ private:
     void LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg);
     void LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr laser_scan);
     void GridMapToCostMap_(void);
-    void PublishCmdVel_(void);
 
     ros::NodeHandle nh_;
     ros::NodeHandle pnh_;
