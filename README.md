@@ -37,13 +37,18 @@ roslaunch rtw_gazebo rtw_gazebo.launch
 rosrun joy joy_node _autorepeat_rate:=30
 ```
 
-3. launch amcl packages.
+3. launch `pointcloud_to_laserscan` node.
+```
+rosrun pointcloud_to_laserscan pointcloudo_laserscan_node cloud_in:=/velodyne/points scan:=/lidar_link/scan
+```
+
+4. launch `amcl` and `map_server` nodes.
 ```
 rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-4. launch the RTW node.
+5. launch the RTW node.
 ```
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
@@ -70,13 +75,18 @@ rosrun rviz rviz
 ```
 you can use Rviz configuration file at "(path to RTW)/src/simulation/rtw_gazebo/rviz/rtw_default.rviz".
 
-4. launch amcl packages.
+4. launch `pointcloud_to_laserscan` node.
+```
+rosrun pointcloud_to_laserscan pointcloudo_laserscan_node cloud_in:=/velodyne/points scan:=/lidar_link/scan
+```
+
+5. launch `amcl` and `map_server` nodes.
 ```
 rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-5. launch the RTW node for manipulating WHILL.
+6. launch the RTW node for manipulating WHILL.
 ```
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
