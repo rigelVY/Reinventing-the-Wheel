@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="data_type" default="LaserScan" />
-  <arg name="sensor_frame" default="lidar_link" />
+  <arg name="sensor_frame" default="velodyne" />
   <arg name="laser_topic" default="/lidar_link/scan" />
   <arg name="grid_map_topic" default="/local_grid_map" />
   <arg name="map_width" default="6.0" />

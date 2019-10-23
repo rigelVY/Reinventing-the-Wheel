@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /Waypoints Path1/Offset1
-        - /DWA Opt Path1/Status1
       Splitter Ratio: 0.5
     Tree Height: 314
   - Class: rviz/Selection
@@ -106,12 +105,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        lidar_link:
+        right_wheel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_wheel_link:
+        velodyne:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        velodyne_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -145,41 +149,41 @@ Visualization Manager:
           Value: false
         left_wheel_link:
           Value: false
-        lidar_link:
-          Value: true
-        map:
-          Value: true
         odom:
           Value: true
         right_wheel_link:
           Value: false
+        velodyne:
+          Value: true
+        velodyne_base_link:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          odom:
-            base_link:
-              base_floor:
-                footrest_link:
-                  {}
-                frontwheel_left:
-                  {}
-                frontwheel_right:
-                  {}
-                left_wheel_link:
-                  {}
-                right_wheel_link:
-                  {}
-              camera_link:
+        odom:
+          base_link:
+            base_floor:
+              footrest_link:
                 {}
-              gps_link:
+              frontwheel_left:
                 {}
-              imu_link:
+              frontwheel_right:
                 {}
-              lidar_link:
+              left_wheel_link:
+                {}
+              right_wheel_link:
+                {}
+            camera_link:
+              {}
+            gps_link:
+              {}
+            imu_link:
+              {}
+            velodyne_base_link:
+              velodyne:
                 {}
       Update Interval: 0
       Value: true
@@ -220,7 +224,7 @@ Visualization Manager:
       Size (Pixels): 2
       Size (m): 0.05000000074505806
       Style: Points
-      Topic: /velodyne/points
+      Topic: /velodyne_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -335,7 +339,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: map
+    Fixed Frame: velodyne
     Frame Rate: 30
   Name: root
   Tools:
@@ -358,7 +362,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -0.43500036001205444
+      Angle: -1.2149994373321533
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
