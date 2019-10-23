@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="data_type" default="LaserScan" />
+  <arg name="base_frame" default="base_link" />
   <arg name="sensor_frame" default="velodyne" />
   <arg name="laser_topic" default="/lidar_link/scan" />
   <arg name="grid_map_topic" default="/local_grid_map" />
@@ -11,6 +12,7 @@
 
   <node name="localmap_2d_node" pkg="localmap_2d" type="localmap_2d_node" output="screen" respawn="true" >
     <param name="data_type" value="$(arg data_type)" />
+    <param name="base_frame" value="$(arg base_frame)" />
     <param name="sensor_frame" value="$(arg sensor_frame)" />
     <param name="laser_topic" value="$(arg laser_topic)" />
     <param name="grid_map_topic" value="$(arg grid_map_topic)" />

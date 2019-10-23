@@ -7,9 +7,9 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Point.h>
 #include <tf/tf.h>
-#include <tf/transform_listener.h>
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <grid_map_msgs/GridMap.h>
+#include <visualization_msgs/Marker.h>
 
 //headers in Boost
 #include <boost/thread.hpp>
@@ -40,6 +40,8 @@ private:
     double HeadingGoalCost_(double terminal_angle);
     void PublishOptimizedPath_(std::vector<DWA::path_point> opt_path);
     double EvaluatePath_(double dt, double move_time);
+    bool ObstacleClearanceCheck_(geometry_msgs::Point target_position);
+    void PublishTargetMarker_(geometry_msgs::PoseStamped target_pose);
     void PublishCmdVel_(void);
 
     ros::NodeHandle nh_;
@@ -51,6 +53,7 @@ private:
     std::string current_pose_topic_;
     std::string grid_map_topic_;
     std::string opt_path_topic_;
+    std::string target_marker_topic_;
     double max_linear_vel_;
     double min_linear_vel_;
     double max_angular_vel_;
@@ -59,6 +62,7 @@ private:
     double weight_obs_;
     double weight_vel_;
     double weight_angle_;
+    double obs_avoid_threshold_;
 
     nav_msgs::Path wps_;
     geometry_msgs::PoseStamped current_pose_;
@@ -66,6 +70,7 @@ private:
     
     ros::Publisher twist_pub_;
     ros::Publisher opt_path_pub_;
+    ros::Publisher target_marker_pub_;
     ros::Subscriber path_sub_;
     ros::Subscriber current_pose_sub_;
     ros::Subscriber local_gridmap_sub_;
