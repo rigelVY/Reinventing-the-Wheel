@@ -7,17 +7,20 @@ DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
     pnh_.param<std::string>("path_topic", path_topic_, "waypoints_raw");
     pnh_.param<std::string>("current_pose_topic", current_pose_topic_, "current_pose");
     pnh_.param<std::string>("grid_map_topic", grid_map_topic_, "local_grid_map");
-    pnh_.param<std::string>("opt_path_topic", opt_path_topic_, "opt_path_points");
+    pnh_.param<std::string>("opt_path_topic", opt_path_topic_, "dwa/opt_path_points");
+    pnh_.param<std::string>("target_marker_topic", target_marker_topic_, "dwa/target_point");
     pnh_.param<double>("max_linear_vel", max_linear_vel_, 1.0);
     pnh_.param<double>("min_linear_vel", min_linear_vel_, 0.05);
     pnh_.param<double>("max_angular_vel", max_angular_vel_, 0.5);
     pnh_.param<double>("min_angular_vel", min_angular_vel_, -0.5);
     pnh_.param<double>("lookahead_distance", lookahead_dist_, 0.5);
     pnh_.param<double>("weight_obs", weight_obs_, 1.0);
-    pnh_.param<double>("weight_vel", weight_vel_, 0.3);
+    pnh_.param<double>("weight_vel", weight_vel_, 1.0);
     pnh_.param<double>("weight_angle", weight_angle_, 1.0);
+    pnh_.param<double>("obs_avoid_threshold", obs_avoid_threshold_, 0.6);
     twist_pub_ = nh_.advertise<geometry_msgs::Twist>(twist_topic_, 1);
     opt_path_pub_ = nh_.advertise<nav_msgs::Path>(opt_path_topic_, 1);
+    target_marker_pub_ = nh_.advertise<visualization_msgs::Marker>(target_marker_topic_, 1);
     path_sub_ = nh_.subscribe(path_topic_, 1, &DWA::WaypointsRawCallback_, this);
     current_pose_sub_ = nh_.subscribe(current_pose_topic_, 1, &DWA::CurrentPoseCallback_, this);
     local_gridmap_sub_= nh_.subscribe(grid_map_topic_, 1, &DWA::LocalGridMapCallback_, this);
@@ -86,37 +89,17 @@ std::vector<std::vector<DWA::path_point>> DWA::CreateCandidatePaths_(double dt, 
 
 double DWA::ObstacleCost_(std::vector<DWA::path_point> path)
 {
-    // tf::TransformListener listener;
-    // tf::StampedTransform tf_map_to_lidar;
-    // try
-    // {
-    //     ros::Time now = ros::Time(0);
-    //     listener.waitForTransform(map_frame_, "lidar_link", now, ros::Duration(5.0));
-    //     listener.lookupTransform(map_frame_, "lidar_link", now, tf_map_to_lidar);
-    // }
-    // catch (tf::TransformException& ex)
-    // {
-    //     ROS_ERROR("%s", ex.what());
-    // }
-
-    // grid_map::Position base_position;
-    // base_position.x() = tf_map_to_lidar.getOrigin().x();
-    // base_position.y() = tf_map_to_lidar.getOrigin().y();
-
     double worst_cost = 0.0;
 
     for(int i=0; i<path.size(); i++)
     {
         grid_map::Position position;
-        // position.x() = path[i].x - base_position.x();
-        // position.y() = path[i].y - base_position.y();
         position.x() = path[i].x - current_pose_.pose.position.x;
         position.y() = path[i].y - current_pose_.pose.position.y;
-        double cost = map_.atPosition("cost_map", position) * 2.0; // multiple 2.0 for normalized
+        double cost = map_.atPosition("cost_map", position);
         if(worst_cost < cost) worst_cost = cost;
     }
 
-    // printf("worst cost; %f\n", worst_cost);
     return worst_cost;
 }
 
@@ -190,6 +173,47 @@ double DWA::EvaluatePath_(double dt, double move_time)
     return optimal_cost;
 }
 
+bool DWA::ObstacleClearanceCheck_(geometry_msgs::Point target_position)
+{
+    grid_map::Position position;
+    position.x() = target_position.x;
+    position.y() = target_position.y;
+    if(map_.atPosition("cost_map", position) > obs_avoid_threshold_) return false;
+    
+    return true;
+}
+
+void DWA::PublishTargetMarker_(geometry_msgs::PoseStamped target_pose)
+{
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = target_pose.header.frame_id;
+    marker.header.stamp = ros::Time::now();
+    marker.ns = "target_marker";
+    marker.id = 0;
+
+    marker.type = visualization_msgs::Marker::SPHERE;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.lifetime = ros::Duration();
+
+    marker.scale.x = 0.5;
+    marker.scale.y = 0.5;
+    marker.scale.z = 0.5;
+    marker.pose.position.x = target_pose.pose.position.x;
+    marker.pose.position.y = target_pose.pose.position.y;
+    marker.pose.position.z = target_pose.pose.position.z;
+    marker.pose.orientation.x = 0;
+    marker.pose.orientation.y = 0;
+    marker.pose.orientation.z = 0;
+    marker.pose.orientation.w = 1;
+    marker.color.r = 0.5;
+    marker.color.g = 1.0;
+    marker.color.b = 0.0;
+    marker.color.a = 0.6;
+    target_marker_pub_.publish(marker);
+
+    return;
+}
+
 void DWA::PublishCmdVel_(void)
 {
     ros::Rate loop_rate(10);
@@ -202,7 +226,7 @@ void DWA::PublishCmdVel_(void)
         double relative_dist, relative_angle;
 
         for(target_index=0; target_index<wps_.poses.size(); target_index++)
-        {      
+        {
             relative_pos.x = wps_.poses[target_index].pose.position.x - current_pose_.pose.position.x;
             relative_pos.y = wps_.poses[target_index].pose.position.y - current_pose_.pose.position.y;
             relative_dist = std::sqrt(std::pow(relative_pos.x, 2) + std::pow(relative_pos.y, 2));
@@ -210,11 +234,15 @@ void DWA::PublishCmdVel_(void)
 
             if(std::abs(relative_angle) < M_PI/2)
             {
-                if(relative_dist > lookahead_dist_) break;
+                if(relative_dist > lookahead_dist_) 
+                {
+                    if(DWA::ObstacleClearanceCheck_(relative_pos)) break;
+                }
             }
         }
         target_relative_dist_ = relative_dist;
         target_relative_angle_ = relative_angle;
+        DWA::PublishTargetMarker_(wps_.poses[target_index]);
 
         double dt = 0.02, move_time = 0.4;
         DWA::EvaluatePath_(dt, move_time);

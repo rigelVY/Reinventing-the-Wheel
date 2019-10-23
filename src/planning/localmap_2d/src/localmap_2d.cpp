@@ -3,6 +3,7 @@
 LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh),map_(grid_map::GridMap({"occgrid_map", "cost_map"}))
 {
     pnh_.param<std::string>("data_type", data_type_, "LaserScan");
+    pnh_.param<std::string>("base_frame", base_frame_, "base_link");
     pnh_.param<std::string>("sensor_frame", sensor_frame_, "lidar_link");
     pnh_.param<std::string>("laser_topic", laser_topic_, "lidar_link/scan");
     pnh_.param<std::string>("grid_map_topic", grid_map_topic_, "local_grid_map");
@@ -13,7 +14,9 @@ LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pn
     grid_map_pub_ = nh_.advertise<grid_map_msgs::GridMap>(grid_map_topic_, 1);
     laser_sub_ = nh_.subscribe(laser_topic_, 1, &LocalMap2D::LaserScanCallback_, this);
 
-    map_.setFrameId(sensor_frame_);
+    LocalMap2D::GetTransformLidarToBase();
+
+    map_.setFrameId(base_frame_);
     map_.setGeometry(grid_map::Length(map_width_, map_height_), resolution_);
     ROS_INFO("Created map with size %f x %f m (%i x %i cells).",
         map_.getLength().x(), map_.getLength().y(),
@@ -23,6 +26,25 @@ LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pn
 LocalMap2D::~LocalMap2D()
 {
 
+}
+
+void LocalMap2D::GetTransformLidarToBase(void)
+{
+    tf::TransformListener listener;
+    tf::StampedTransform tf_base_to_lidar;
+    try
+    {
+        ros::Time now = ros::Time(0);
+        listener.waitForTransform(base_frame_, sensor_frame_, now, ros::Duration(1.0));
+        listener.lookupTransform(base_frame_, sensor_frame_, now, tf_base_to_lidar);
+    }
+    catch (tf::TransformException& ex)
+    {
+        ROS_ERROR("%s", ex.what());
+    }
+
+    lidar_offset_.x() = tf_base_to_lidar.getOrigin().x();
+    lidar_offset_.y() = tf_base_to_lidar.getOrigin().y();
 }
 
 void LocalMap2D::LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg)
@@ -50,12 +72,12 @@ void LocalMap2D::LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr lase
         if(range < laser_scan->range_min || range > laser_scan->range_max) continue;
 
         grid_map::Position position;
-        position.x() = range * cos(angle);
-        position.y() = range * sin(angle);
+        position.x() = range * cos(angle) + lidar_offset_.x();
+        position.y() = range * sin(angle) + lidar_offset_.y();
         if(map_width_/2.0 < abs(position.x()) || map_height_/2.0 < abs(position.y())) continue;
         grid_map::Index index;
         map_.getIndex(position, index);
-        map_.at("occgrid_map", index) = 0.5;
+        map_.at("occgrid_map", index) = 1.0;
 
         obstacles_index_.emplace_back(index);
     }
@@ -77,7 +99,7 @@ void LocalMap2D::GridMapToCostMap_(void)
             obs_dist_square = std::pow((obs_pos.x() - position.x()), 2) + std::pow((obs_pos.y() - position.y()), 2);
             if(obs_dist_square < nearest_obs_dist_square) nearest_obs_dist_square = obs_dist_square;
         }
-        map_.at("cost_map", *it) = 0.5 * exp(-nearest_obs_dist_square / std::pow(costmap_grad_, 2));
+        map_.at("cost_map", *it) = exp(-nearest_obs_dist_square / std::pow(costmap_grad_, 2));
     }
     return;
 }
