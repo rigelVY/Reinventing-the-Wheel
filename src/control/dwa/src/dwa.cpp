@@ -9,6 +9,7 @@ DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
     pnh_.param<std::string>("grid_map_topic", grid_map_topic_, "local_grid_map");
     pnh_.param<std::string>("opt_path_topic", opt_path_topic_, "dwa/opt_path_points");
     pnh_.param<std::string>("target_marker_topic", target_marker_topic_, "dwa/target_point");
+    pnh_.param<int>("target_search_interval", target_search_interval_, 10);
     pnh_.param<double>("max_linear_vel", max_linear_vel_, 1.0);
     pnh_.param<double>("min_linear_vel", min_linear_vel_, 0.05);
     pnh_.param<double>("max_angular_vel", max_angular_vel_, 0.5);
@@ -221,29 +222,45 @@ void DWA::PublishCmdVel_(void)
     {
         if(!current_pose_received_) continue;
 
-        int target_index;
+        int min_search_window = std::max(previous_nearest_index_-target_search_interval_, 0);
+        int max_search_window = std::min(previous_nearest_index_+target_search_interval_, (int)wps_.poses.size());
+        
+        int nearest_index;
         geometry_msgs::Point relative_pos;
-        double relative_dist, relative_angle;
+        double relative_dist, nearest_relative_dist, relative_angle;
 
-        for(target_index=0; target_index<wps_.poses.size(); target_index++)
+        relative_pos.x = wps_.poses[min_search_window].pose.position.x - current_pose_.pose.position.x;
+        relative_pos.y = wps_.poses[min_search_window].pose.position.y - current_pose_.pose.position.y;
+        nearest_relative_dist = sqrt(pow(relative_pos.x, 2) + pow(relative_pos.y, 2));
+
+        for(nearest_index=min_search_window+1; nearest_index<max_search_window; nearest_index++)
+        {
+            relative_pos.x = wps_.poses[nearest_index].pose.position.x - current_pose_.pose.position.x;
+            relative_pos.y = wps_.poses[nearest_index].pose.position.y - current_pose_.pose.position.y;
+            relative_dist = sqrt(pow(relative_pos.x, 2) + pow(relative_pos.y, 2));
+
+            if(nearest_relative_dist < relative_dist) break;
+            nearest_relative_dist = relative_dist;
+        }
+        previous_nearest_index_ = nearest_index;
+
+        int target_index;
+        for(target_index=nearest_index; target_index<max_search_window; target_index++)
         {
             relative_pos.x = wps_.poses[target_index].pose.position.x - current_pose_.pose.position.x;
             relative_pos.y = wps_.poses[target_index].pose.position.y - current_pose_.pose.position.y;
-            relative_dist = std::sqrt(std::pow(relative_pos.x, 2) + std::pow(relative_pos.y, 2));
-            relative_angle = std::atan2(relative_pos.y, relative_pos.x) - tf::getYaw(current_pose_.pose.orientation);
+            relative_dist = sqrt(pow(relative_pos.x, 2) + pow(relative_pos.y, 2));
+            relative_angle = atan2(relative_pos.y, relative_pos.x) - tf::getYaw(current_pose_.pose.orientation);
 
-            if(std::abs(relative_angle) < M_PI/2)
+            if(relative_dist > lookahead_dist_) 
             {
-                if(relative_dist > lookahead_dist_) 
-                {
-                    if(DWA::ObstacleClearanceCheck_(relative_pos)) break;
-                }
+                if(DWA::ObstacleClearanceCheck_(relative_pos)) break;
             }
         }
         target_relative_dist_ = relative_dist;
         target_relative_angle_ = relative_angle;
         DWA::PublishTargetMarker_(wps_.poses[target_index]);
-
+        
         double dt = 0.02, move_time = 0.4;
         DWA::EvaluatePath_(dt, move_time);
 

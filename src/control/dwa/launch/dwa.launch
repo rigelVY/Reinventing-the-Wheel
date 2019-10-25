@@ -6,6 +6,7 @@
   <arg name="current_pose_topic" default="/current_pose" />
   <arg name="opt_path_topic" default="/dwa/opt_path_points" />
   <arg name="target_marker_topic" default="/dwa/target_point" />
+  <arg name="target_search_interval" default="10" />
   <arg name="max_linear_vel" default="0.5" />
   <arg name="min_linear_vel" default="0.05" />
   <arg name="max_angular_vel" default="3.0" />
@@ -23,6 +24,7 @@
     <param name="current_pose_topic" value="$(arg current_pose_topic)" />
     <param name="opt_path_topic" value="$(arg opt_path_topic)" />
     <param name="target_marker_topic" value="$(arg target_marker_topic)" />
+    <param name="target_search_interval" value="$(arg target_search_interval)" />
     <param name="max_linear_vel" value="$(arg max_linear_vel)" />
     <param name="min_linear_vel" value="$(arg min_linear_vel)" />
     <param name="max_angular_vel" value="$(arg max_angular_vel)" />
