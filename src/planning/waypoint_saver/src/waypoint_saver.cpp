@@ -39,26 +39,17 @@ void WaypointSaver::PublishPointsMarkerArray_(geometry_msgs::PoseStamped pose)
     marker.frame_locked = true;
 
     // create saved waypoint marker
-    marker.scale.x = 0.5;
+    marker.scale.x = 0.3;
     marker.scale.y = 0.1;
-    marker.scale.z = 0.1;
+    marker.scale.z = 0.2;
     marker.color.a = 1.0;
     marker.color.r = 0.0;
     marker.color.g = 1.0;
     marker.color.b = 0.0;
-    marker.ns = "saved_waypoint_arrow";
+    marker.ns = "saved_waypoints_arrow";
     marker.type = visualization_msgs::Marker::ARROW;
     marker.action = visualization_msgs::Marker::ADD;
     marker.pose = pose.pose;
-    marray.markers.push_back(marker);
-
-    // create saved waypoint velocity text
-    marker.scale.z = 0.4;
-    marker.color.a = 1.0;
-    marker.color.r = 1.0;
-    marker.ns = "saved_waypoint_velocity";
-    marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
-    marker.action = visualization_msgs::Marker::ADD;
     marray.markers.push_back(marker);
 
     wps_marker_pub_.publish(marray);
