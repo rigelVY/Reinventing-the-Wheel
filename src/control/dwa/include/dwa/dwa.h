@@ -54,6 +54,7 @@ private:
     std::string grid_map_topic_;
     std::string opt_path_topic_;
     std::string target_marker_topic_;
+    int target_search_interval_;
     double max_linear_vel_;
     double min_linear_vel_;
     double max_angular_vel_;
@@ -77,6 +78,7 @@ private:
 
     double target_relative_dist_, target_relative_angle_;
     double optimal_linear_vel_, optimal_angular_vel_;
+    int previous_nearest_index_;
 
     int current_pose_received_;
 };
