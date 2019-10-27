@@ -34,18 +34,13 @@ we can choose one of the following robot models by changing roslaunch parameter 
 roslaunch rtw_gazebo rtw_gazebo.launch
 ```
 
-2. launch `pointcloud_to_laserscan` node.
-```
-rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node cloud_in:=/velodyne_points scan:=/lidar_link/scan
-```
-
-3. launch `amcl` and `map_server` nodes.
+2. launch `amcl` and `map_server` nodes.
 ```
 rosrun map_server map_server src/data/map/mymap.yaml
-rosrun amcl amcl scan:=lidar_link/scan
+rosrun amcl amcl
 ```
 
-4. launch the RTW nodes.
+3. launch the RTW nodes.
 ```
 roslaunch rostate_machine control_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=simulation
