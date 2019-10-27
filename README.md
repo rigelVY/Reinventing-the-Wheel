@@ -52,7 +52,7 @@ roslaunch whill_interface whill_interface.launch mode:=simulation
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
-roslaunch pure_pursuit pure_pursuit.launch
+roslaunch dwa dwa.launch
 ```
 
 ### Case 2: real environment mode
@@ -61,23 +61,23 @@ roslaunch pure_pursuit pure_pursuit.launch
 roslaunch rtw_gazebo rtw_startup.launch 
 ```
 
-2. launch `pointcloud_to_laserscan` node.
+2. launch velodyne node.
 ```
-rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node cloud_in:=/velodyne_points scan:=/lidar_link/scan
+roslaunch velodyne_pointcloud VLP16_points.launch
 ```
 
 3. launch `amcl` and `map_server` nodes.
 ```
 rosrun map_server map_server src/data/map/mymap.yaml
-rosrun amcl amcl scan:=lidar_link/scan
+rosrun amcl amcl
 ```
 
-4. launch the RTW nodes for manipulating WHILL.
+4. launch the RTW nodes.
 ```
 roslaunch rostate_machine control_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=real
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
-roslaunch pure_pursuit pure_pursuit.launch
+roslaunch dwa dwa.launch
 ```
