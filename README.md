@@ -24,7 +24,7 @@ catkin_make
 ## Launch RTW and manipulate WHILL
 
 ### Case 1: simulation mode
-1. launch gazebo and Rviz.  
+1. launch gazebo, Rviz and `joy`.  
 we can choose one of the following robot models by changing roslaunch parameter `model`.
 - whill_modelc (*default*)
 - dtw_robot
@@ -33,23 +33,18 @@ we can choose one of the following robot models by changing roslaunch parameter 
 roslaunch rtw_gazebo rtw_gazebo.launch
 ```
 
-2. launch joy node.
-```
-rosrun joy joy_node _autorepeat_rate:=30
-```
-
-3. launch `pointcloud_to_laserscan` node.
+2. launch `pointcloud_to_laserscan` node.
 ```
 rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node cloud_in:=/velodyne_points scan:=/lidar_link/scan
 ```
 
-4. launch `amcl` and `map_server` nodes.
+3. launch `amcl` and `map_server` nodes.
 ```
 rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-5. launch the RTW node.
+4. launch the RTW node.
 ```
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
@@ -60,34 +55,20 @@ roslaunch whill_interface whill_interface.launch mode:=simulation
 ```
 
 ### Case 2: real environment mode
-1. launch WHILL driver.
-```
-roslaunch ros_whill ros_whill.launch
-```
+1. launch whill driver, Rviz and `joy`.  
 
-2. launch joy node.
-```
-rosrun joy joy_node _autorepeat_rate:=30
-```
-
-3. launch Rviz.
-```
-rosrun rviz rviz
-```
-you can use Rviz configuration file at "(path to RTW)/src/simulation/rtw_gazebo/rviz/rtw_default.rviz".
-
-4. launch `pointcloud_to_laserscan` node.
+2. launch `pointcloud_to_laserscan` node.
 ```
 rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node cloud_in:=/velodyne_points scan:=/lidar_link/scan
 ```
 
-5. launch `amcl` and `map_server` nodes.
+3. launch `amcl` and `map_server` nodes.
 ```
 rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-6. launch the RTW node for manipulating WHILL.
+4. launch the RTW node for manipulating WHILL.
 ```
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
