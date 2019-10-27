@@ -7,6 +7,7 @@ ROS: Melodic
 ## Build the Workpace
 1. install dependencies
 ```
+sudo apt install ros-$ROS_DISTRO-serial
 sudo apt install ros-$ROS_DISTRO-velodyne*
 sudo apt install ros-$ROS_DISTRO-hector-gazebo-plugins
 sudo apt install ros-$ROS_DISTRO-gridmap*
@@ -46,12 +47,12 @@ rosrun amcl amcl scan:=lidar_link/scan
 
 4. launch the RTW node.
 ```
+roslaunch rostate_machine control_state_machine.launch
+roslaunch whill_interface whill_interface.launch mode:=simulation
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
-roslaunch rostate_machine control_state_machine.launch
-roslaunch whill_interface whill_interface.launch mode:=simulation
 ```
 
 ### Case 2: real environment mode
@@ -68,12 +69,16 @@ rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
+<<<<<<< HEAD
 4. launch the RTW node for manipulating WHILL.
+=======
+6. launch the RTW nodes for manipulating WHILL.
+>>>>>>> 953694f0b4dd303b8aff7f1dec9e3fa43c3d7c56
 ```
+roslaunch rostate_machine control_state_machine.launch
+roslaunch whill_interface whill_interface.launch mode:=real
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
-roslaunch rostate_machine control_state_machine.launch
-roslaunch whill_interface whill_interface.launch mode:=real
 ```
