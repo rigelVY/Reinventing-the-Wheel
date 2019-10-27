@@ -7,6 +7,7 @@ ROS: Melodic
 ## Build the Workpace
 1. install dependencies
 ```
+sudo apt install ros-$ROS_DISTRO-serial
 sudo apt install ros-$ROS_DISTRO-velodyne*
 sudo apt install ros-$ROS_DISTRO-hector-gazebo-plugins
 sudo apt install ros-$ROS_DISTRO-gridmap*
