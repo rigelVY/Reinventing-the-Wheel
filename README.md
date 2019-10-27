@@ -45,7 +45,7 @@ rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-4. launch the RTW node.
+4. launch the RTW nodes.
 ```
 roslaunch rostate_machine control_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=simulation
@@ -69,11 +69,7 @@ rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-<<<<<<< HEAD
-4. launch the RTW node for manipulating WHILL.
-=======
-6. launch the RTW nodes for manipulating WHILL.
->>>>>>> 953694f0b4dd303b8aff7f1dec9e3fa43c3d7c56
+4. launch the RTW nodes for manipulating WHILL.
 ```
 roslaunch rostate_machine control_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=real
