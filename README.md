@@ -51,12 +51,12 @@ rosrun amcl amcl scan:=lidar_link/scan
 
 5. launch the RTW node.
 ```
+roslaunch rostate_machine control_state_machine.launch
+roslaunch whill_interface whill_interface.launch mode:=simulation
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
-roslaunch rostate_machine control_state_machine.launch
-roslaunch whill_interface whill_interface.launch mode:=simulation
 ```
 
 ### Case 2: real environment mode
@@ -87,12 +87,12 @@ rosrun map_server map_server src/data/map/mymap.yaml
 rosrun amcl amcl scan:=lidar_link/scan
 ```
 
-6. launch the RTW node for manipulating WHILL.
+6. launch the RTW nodes for manipulating WHILL.
 ```
+roslaunch rostate_machine control_state_machine.launch
+roslaunch whill_interface whill_interface.launch mode:=real
 roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch pure_pursuit pure_pursuit.launch
-roslaunch rostate_machine control_state_machine.launch
-roslaunch whill_interface whill_interface.launch mode:=real
 ```
