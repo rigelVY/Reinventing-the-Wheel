@@ -57,6 +57,9 @@ roslaunch pure_pursuit pure_pursuit.launch
 
 ### Case 2: real environment mode
 1. launch whill driver, Rviz and `joy`.  
+```
+roslaunch rtw_gazebo rtw_startup.launch 
+```
 
 2. launch `pointcloud_to_laserscan` node.
 ```
