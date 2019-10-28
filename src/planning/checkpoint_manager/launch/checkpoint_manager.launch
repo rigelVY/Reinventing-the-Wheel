@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="checkpoints_csv" default="$(find checkpoint_manager)/../../data/checkpoint/checkpoints.csv" />
+  <arg name="state_array_topic" default="/state" />
+  <arg name="marker_topic" default="/checkpoints_marker" />
+  <arg name="current_pose_topic" default="/current_pose" />
+  <arg name="reset_topic" default="/checkpoint_manager/reset" />
+  <arg name="map_frame" default="map" />
+  <arg name="boundary_distance" default="0.5" />
+
+  <node name="checkpoint_manager_node" pkg="checkpoint_manager" type="checkpoint_manager_node" output="screen" respawn="true" >
+    <param name="checkpoints_csv" value="$(arg checkpoints_csv)" />
+    <param name="state_array_topic" value="$(arg state_array_topic)" />
+    <param name="marker_topic" value="$(arg marker_topic)" />
+    <param name="current_pose_topic" value="$(arg current_pose_topic)" />
+    <param name="reset_topic" value="$(arg reset_topic)" />
+    <param name="map_frame" value="$(arg map_frame)" />
+    <param name="boundary_distance" value="$(arg boundary_distance)" />
+  </node>
+</launch>
