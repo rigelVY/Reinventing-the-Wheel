@@ -3,8 +3,8 @@
 CheckpointManager::CheckpointManager(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
 {
     pnh_.param<std::string>("checkpoints_csv", checkpoints_path_, "/tmp/checkpoints.csv");
-    pnh_.param<std::string>("state_array_topic", state_array_topic_, "state");
-    pnh_.param<std::string>("marker_topic", marker_topic_, "checkpoints_marker");
+    pnh_.param<std::string>("state_array_topic", state_array_topic_, "checkpoint_manager/state");
+    pnh_.param<std::string>("marker_topic", marker_topic_, "checkpoint_manager/checkpoints_marker");
     pnh_.param<std::string>("current_pose_topic", current_pose_topic_, "current_pose");
     pnh_.param<std::string>("reset_topic", reset_topic_, "checkpoint_manager/reset");
     pnh_.param<std::string>("map_frame", map_frame_, "map");
@@ -60,7 +60,7 @@ void CheckpointManager::LoadCheckpoint_(const std::string& line, checkpoint_msgs
         columns.push_back(column);
     }
 
-    state->label = std::stoi(columns[0]);
+    state->label = columns[0];
     state->position.x = std::stod(columns[1]);
     state->position.y = std::stod(columns[2]);
     state->position.z = std::stod(columns[3]);
@@ -123,11 +123,7 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     pict.mode = jsk_rviz_plugins::Pictogram::PICTOGRAM_MODE;
     pict.character = "fa-angle-double-down";
     // pict.character = "phone";
-    pict.size = 1.5;
-    pict.color.r = 25.0 / 255.0;
-    pict.color.g = 255.0 / 255.0;
-    pict.color.b = 240.0 / 255.0;
-    pict.color.a = 1.0;
+    pict.size = 2.0;
     pict.action = jsk_rviz_plugins::Pictogram::ADD;
     pict.pose.orientation.x = 0.0;
     pict.pose.orientation.y = 1.0 * sin(-M_PI/4.0);
@@ -137,6 +133,22 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     for(int i=0; i<cp_states_.states.size(); i++)
     {
         pict.pose.position = cp_states_.states[i].position;
+
+        if(cp_states_.states[i].state == checkpoint_msgs::State::UNPASSED)
+        {
+            pict.color.r = 25.0 / 255.0;
+            pict.color.g = 255.0 / 255.0;
+            pict.color.b = 240.0 / 255.0;
+            pict.color.a = 1.0;
+        }
+        else
+        {
+            pict.color.r = 255.0 / 255.0;
+            pict.color.g = 0.0 / 255.0;
+            pict.color.b = 0.0 / 255.0;
+            pict.color.a = 1.0;
+        }
+        
         markers.pictograms.push_back(pict);
     }
 
@@ -147,7 +159,7 @@ void CheckpointManager::PublishCheckpointMarker_(void)
 
 void CheckpointManager::PublishCheckpointArray_(void)
 {
-    ros::Rate loop_rate(30);
+    ros::Rate loop_rate(20);
     while(ros::ok())
     {
         CheckpointManager::PublishCheckpointMarker_();

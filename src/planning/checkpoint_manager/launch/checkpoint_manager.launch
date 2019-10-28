@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="checkpoints_csv" default="$(find checkpoint_manager)/../../data/checkpoint/checkpoints.csv" />
-  <arg name="state_array_topic" default="/state" />
-  <arg name="marker_topic" default="/checkpoints_marker" />
+  <arg name="state_array_topic" default="/checkpoint_manager/state" />
+  <arg name="marker_topic" default="/checkpoint_manager/checkpoints_marker" />
   <arg name="current_pose_topic" default="/current_pose" />
   <arg name="reset_topic" default="/checkpoint_manager/reset" />
   <arg name="map_frame" default="map" />

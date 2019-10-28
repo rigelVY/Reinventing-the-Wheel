@@ -83,7 +83,6 @@ boost::optional<rostate_machine::Event> MissionPlanner::MainMissionCallback_(voi
     return boost::none;
 }
 
-
 boost::optional<rostate_machine::Event> MissionPlanner::OptionalMissionAlphaCallback_(void)
 {
 
