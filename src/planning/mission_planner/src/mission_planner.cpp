@@ -9,14 +9,13 @@ MissionPlanner::MissionPlanner(ros::NodeHandle nh,ros::NodeHandle pnh)
     control_client_.registerCallback(std::bind(&MissionPlanner::AutonomousStateCallback_, this),"autonomous_driving");
     control_client_.registerCallback(std::bind(&MissionPlanner::ManualStateCallback_, this),"manual_driving");
     control_client_.registerCallback(std::bind(&MissionPlanner::StoppingStateCallback_, this),"stopping");
+    control_client_.run();
 
     mission_client_.registerCallback(std::bind(&MissionPlanner::MainMissionCallback_, this),"main_mission");
     mission_client_.registerCallback(std::bind(&MissionPlanner::OptionalMissionAlphaCallback_, this),"optional_mission_A");
     mission_client_.registerCallback(std::bind(&MissionPlanner::OptionalMissionBravoCallback_, this),"optional_mission_B");
     mission_client_.registerCallback(std::bind(&MissionPlanner::OptionalMissionCharlieCallback_, this),"optional_mission_C");
     mission_client_.registerCallback(std::bind(&MissionPlanner::OptionalMissionDeltaCallback_, this),"optional_mission_D");
-
-    control_client_.run();
     mission_client_.run();
 }
 
