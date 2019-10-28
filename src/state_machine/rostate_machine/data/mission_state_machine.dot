@@ -1,0 +1,62 @@
+digraph G {
+graph [bgcolor=white]
+0 [color=black,fontsize=12,shape=ellipse,label="main_mission"]
+;
+1 [color=black,fontsize=12,shape=ellipse,label="optional_mission_A"]
+;
+2 [color=black,fontsize=12,shape=ellipse,label="optional_mission_B"]
+;
+3 [color=blue,fontsize=12,shape=ellipse,label="optional_mission_C"]
+[fontcolor=blue]
+;
+4 [color=black,fontsize=12,shape=ellipse,label="optional_mission_D"]
+;
+0->1 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="start_mission_A"]
+;
+0->2 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="start_mission_B"]
+;
+0->3 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="start_mission_C"]
+;
+0->4 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="start_mission_D"]
+;
+1->0 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="back_to_main_mission"]
+;
+2->0 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="back_to_main_mission"]
+;
+3->0 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="back_to_main_mission"]
+;
+4->0 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="back_to_main_mission"]
+;
+}

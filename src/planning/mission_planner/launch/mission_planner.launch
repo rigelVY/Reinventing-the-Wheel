@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mode" default="simulation" />  <!--select "simulation" or "real"-->
+  <arg name="sub_joy_topic" default="/joy" />
+
+  <node name="mission_planner_node" pkg="mission_planner" type="mission_planner_node" output="screen" respawn="true" >
+    <param name="sub_joy_topic" value="$(arg sub_joy_topic)" />
+  </node>
+</launch>

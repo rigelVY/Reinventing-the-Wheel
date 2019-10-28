@@ -1,9 +1,9 @@
 digraph G {
 graph [bgcolor=white]
-0 [color=blue,fontsize=12,shape=ellipse,label="manual_driving"]
-[fontcolor=blue]
+0 [color=black,fontsize=12,shape=ellipse,label="manual_driving"]
 ;
-1 [color=black,fontsize=12,shape=ellipse,label="autonomous_driving"]
+1 [color=blue,fontsize=12,shape=ellipse,label="autonomous_driving"]
+[fontcolor=blue]
 ;
 2 [color=black,fontsize=12,shape=ellipse,label="stopping"]
 ;
