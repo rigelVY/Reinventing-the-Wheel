@@ -4,13 +4,15 @@ CheckpointManager::CheckpointManager(ros::NodeHandle nh,ros::NodeHandle pnh) : n
 {
     pnh_.param<std::string>("checkpoints_csv", checkpoints_path_, "/tmp/checkpoints.csv");
     pnh_.param<std::string>("state_array_topic", state_array_topic_, "checkpoint_manager/state");
-    pnh_.param<std::string>("marker_topic", marker_topic_, "checkpoint_manager/checkpoints_marker");
+    pnh_.param<std::string>("pict_marker_topic", pict_marker_topic_, "checkpoint_manager/pict_marker");
+    pnh_.param<std::string>("cirlce_marker_topic", circle_marker_topic_, "checkpoint_manager/circle_marker");
     pnh_.param<std::string>("current_pose_topic", current_pose_topic_, "current_pose");
     pnh_.param<std::string>("reset_topic", reset_topic_, "checkpoint_manager/reset");
     pnh_.param<std::string>("map_frame", map_frame_, "map");
     pnh_.param<double>("boundary_distance", boundary_distance_, 0.5);
     cp_states_pub_ = nh_.advertise<checkpoint_msgs::StateArray>(state_array_topic_, 10);
-    markers_pub_ = nh_.advertise<jsk_rviz_plugins::PictogramArray>(marker_topic_, 10);
+    pict_markers_pub_ = nh_.advertise<jsk_rviz_plugins::PictogramArray>(pict_marker_topic_, 10);
+    circle_markers_pub_ = nh_.advertise<visualization_msgs::MarkerArray>(circle_marker_topic_, 10);
     current_pose_sub_ = nh_.subscribe(current_pose_topic_, 10, &CheckpointManager::CurrentPoseCallback_, this);
     reset_sub_ = nh_.subscribe(reset_topic_, 10, &CheckpointManager::ResetMsgCallback_, this);
     boost::thread publish_thread(boost::bind(&CheckpointManager::PublishCheckpointArray_, this));
@@ -123,9 +125,9 @@ void CheckpointManager::ResetMsgCallback_(const checkpoint_msgs::ResetMsg::Const
 
 void CheckpointManager::PublishCheckpointMarker_(void)
 {
-    jsk_rviz_plugins::PictogramArray markers;
-    markers.header.stamp = current_time_;
-    markers.header.frame_id = map_frame_;
+    jsk_rviz_plugins::PictogramArray pict_markers;
+    pict_markers.header.stamp = current_time_;
+    pict_markers.header.frame_id = map_frame_;
 
     jsk_rviz_plugins::Pictogram pict;
     pict.header.stamp = current_time_;
@@ -139,9 +141,27 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     pict.pose.orientation.z = 0.0;
     pict.pose.orientation.w = cos(-M_PI/4.0);
 
+    static visualization_msgs::MarkerArray circle_markers;
+    // static int id = 0;
+    visualization_msgs::Marker marker;
+    marker.id = 0;
+    marker.header.stamp = current_time_;
+    marker.header.frame_id = map_frame_;
+    marker.scale.x = boundary_distance_*2.0;
+    marker.scale.y = boundary_distance_*2.0;
+    marker.scale.z = 0.02;
+    marker.ns = "checkpoint_circle";
+    marker.type = visualization_msgs::Marker::CYLINDER;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.orientation.x = 0.0;
+    marker.pose.orientation.y = 0.0;
+    marker.pose.orientation.z = 0.0;
+    marker.pose.orientation.w = 1.0;
+    
     for(int i=0; i<cp_states_.states.size(); i++)
     {
         pict.pose.position = cp_states_.states[i].position;
+        marker.pose.position = cp_states_.states[i].position;
 
         if(cp_states_.states[i].state == checkpoint_msgs::State::UNPASSED)
         {
@@ -149,6 +169,11 @@ void CheckpointManager::PublishCheckpointMarker_(void)
             pict.color.g = 255.0 / 255.0;
             pict.color.b = 240.0 / 255.0;
             pict.color.a = 1.0;
+
+            marker.color.r = 25.0 / 255.0;
+            marker.color.g = 255.0 / 255.0;
+            marker.color.b = 240.0 / 255.0;
+            marker.color.a = 0.5;
         }
         else
         {
@@ -156,12 +181,20 @@ void CheckpointManager::PublishCheckpointMarker_(void)
             pict.color.g = 0.0 / 255.0;
             pict.color.b = 0.0 / 255.0;
             pict.color.a = 1.0;
+
+            marker.color.r = 255.0 / 255.0;
+            marker.color.g = 0.0 / 255.0;
+            marker.color.b = 0.0 / 255.0;
+            marker.color.a = 0.5;
         }
         
-        markers.pictograms.push_back(pict);
+        pict_markers.pictograms.push_back(pict);
+        circle_markers.markers.push_back(marker);
+        marker.id++;
     }
 
-    markers_pub_.publish(markers);
+    pict_markers_pub_.publish(pict_markers);
+    circle_markers_pub_.publish(circle_markers);
 
     return;
 }

@@ -6,6 +6,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <checkpoint_msgs/StateArray.h>
 #include <checkpoint_msgs/ResetMsg.h>
+#include <visualization_msgs/MarkerArray.h>
 #include <jsk_rviz_plugins/PictogramArray.h>
 
 #include <fstream>
@@ -34,7 +35,8 @@ private:
     
     std::string checkpoints_path_;
     std::string state_array_topic_;
-    std::string marker_topic_;
+    std::string pict_marker_topic_;
+    std::string circle_marker_topic_;
     std::string current_pose_topic_;
     std::string reset_topic_;
     std::string map_frame_;
@@ -46,7 +48,8 @@ private:
     ros::Subscriber current_pose_sub_;
     ros::Subscriber reset_sub_;
     ros::Publisher cp_states_pub_;
-    ros::Publisher markers_pub_;
+    ros::Publisher pict_markers_pub_;
+    ros::Publisher circle_markers_pub_;
 };
 
 #endif  //CHECKPOINT_MANAGER_CHECKPOINT_MANAGER_H_INCLUDED
