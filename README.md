@@ -44,10 +44,13 @@ rosrun amcl amcl
 3. launch the RTW nodes.
 ```
 roslaunch rostate_machine control_state_machine.launch
+roslaunch rostate_machine mission_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=simulation
-roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
+roslaunch checkpoint_manager checkpoint_manager.launch
+roslaunch mission_planner mission_planner.launch
+roslaunch localmap_2d localmap_2d.launch
 roslaunch dwa dwa.launch
 ```
 
