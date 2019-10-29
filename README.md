@@ -12,6 +12,7 @@ sudo apt install ros-$ROS_DISTRO-velodyne*
 sudo apt install ros-$ROS_DISTRO-hector-gazebo-plugins
 sudo apt install ros-$ROS_DISTRO-gridmap*
 sudo apt install ros-$ROS_DISTRO-gmapping ros-$ROS_DISTRO-amcl ros-$ROS_DISTRO-map-server 
+sudo apt install ros-$ROS_DISTRO-jsk-visualization
 ```
 
 2. clone & build of Reinventing-the-Wheel package
@@ -43,10 +44,13 @@ rosrun amcl amcl
 3. launch the RTW nodes.
 ```
 roslaunch rostate_machine control_state_machine.launch
+roslaunch rostate_machine mission_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=simulation
-roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
 roslaunch dummy_localizer dummy_localizer.launch
+roslaunch checkpoint_manager checkpoint_manager.launch
+roslaunch mission_planner mission_planner.launch
+roslaunch localmap_2d localmap_2d.launch
 roslaunch dwa dwa.launch
 ```
 
