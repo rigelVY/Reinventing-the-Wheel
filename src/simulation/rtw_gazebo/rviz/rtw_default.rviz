@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /Waypoints Path1/Offset1
-        - /MarkerArray1/Status1
       Splitter Ratio: 0.5
     Tree Height: 328
   - Class: rviz/Selection
@@ -173,33 +172,31 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          base_floor:
-            footrest_link:
-              {}
-            frontwheel_left:
-              {}
-            frontwheel_right:
-              {}
-            left_wheel_link:
-              {}
-            right_wheel_link:
-              {}
-          camera_link:
-            {}
-          gps_link:
-            {}
-          imu_link:
-            {}
-          lidar_link:
-            {}
-          velodyne_base_link:
-            velodyne:
-              {}
         map:
-          {}
-        odom:
-          {}
+          odom:
+            base_link:
+              base_floor:
+                footrest_link:
+                  {}
+                frontwheel_left:
+                  {}
+                frontwheel_right:
+                  {}
+                left_wheel_link:
+                  {}
+                right_wheel_link:
+                  {}
+              camera_link:
+                {}
+              gps_link:
+                {}
+              imu_link:
+                {}
+              lidar_link:
+                {}
+              velodyne_base_link:
+                velodyne:
+                  {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
@@ -360,18 +357,18 @@ Visualization Manager:
       Value: true
     - Class: jsk_rviz_plugin/PictogramArray
       Enabled: true
-      Name: Checkpoints Marker
+      Name: CP Pict MarkerArray
       Topic: /checkpoint_manager/pict_marker
       Unreliable: false
       Value: true
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /checkpoint_manager_node/checkpoint_manager/circle_marker
-      Name: MarkerArray
+      Name: CP Circle MarkerArray
       Namespaces:
-        {}
+        checkpoint_circle: true
       Queue Size: 100
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -407,18 +404,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.5651451945304871
-        Y: 0.7563758492469788
-        Z: -0.000885009765625
+        X: 0.4537624418735504
+        Y: -0.1930513083934784
+        Z: -0.9896078109741211
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6447965502738953
+      Pitch: 0.4497964680194855
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.6368186473846436
+      Yaw: 3.5468177795410156
     Saved: ~
 Window Geometry:
   Displays:
