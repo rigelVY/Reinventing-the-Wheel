@@ -11,8 +11,8 @@ CheckpointManager::CheckpointManager(ros::NodeHandle nh,ros::NodeHandle pnh) : n
     pnh_.param<double>("boundary_distance", boundary_distance_, 0.5);
     cp_states_pub_ = nh_.advertise<checkpoint_msgs::StateArray>(state_array_topic_, 10);
     markers_pub_ = nh_.advertise<jsk_rviz_plugins::PictogramArray>(marker_topic_, 10);
-    current_pose_sub_ = nh_.subscribe(current_pose_topic_, 1, &CheckpointManager::CurrentPoseCallback_, this);
-    reset_sub_ = nh_.subscribe(reset_topic_, 1, &CheckpointManager::ResetMsgCallback_, this);
+    current_pose_sub_ = nh_.subscribe(current_pose_topic_, 10, &CheckpointManager::CurrentPoseCallback_, this);
+    reset_sub_ = nh_.subscribe(reset_topic_, 10, &CheckpointManager::ResetMsgCallback_, this);
     boost::thread publish_thread(boost::bind(&CheckpointManager::PublishCheckpointArray_, this));
 
     CheckpointManager::InitializeCheckpointArray_();
@@ -89,6 +89,11 @@ void CheckpointManager::CurrentPoseCallback_(const geometry_msgs::PoseStamped::C
         }
     }
 
+    current_time_ = ros::Time::now();
+    CheckpointManager::PublishCheckpointMarker_();
+    cp_states_.header.stamp = current_time_;
+    cp_states_pub_.publish(cp_states_);
+
     return;
 }
 
@@ -108,6 +113,11 @@ void CheckpointManager::ResetMsgCallback_(const checkpoint_msgs::ResetMsg::Const
         }
     }
 
+    current_time_ = ros::Time::now();
+    CheckpointManager::PublishCheckpointMarker_();
+    cp_states_.header.stamp = current_time_;
+    cp_states_pub_.publish(cp_states_);
+
     return;
 }
 
@@ -122,7 +132,6 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     pict.header.frame_id = map_frame_;
     pict.mode = jsk_rviz_plugins::Pictogram::PICTOGRAM_MODE;
     pict.character = "fa-angle-double-down";
-    // pict.character = "phone";
     pict.size = 2.0;
     pict.action = jsk_rviz_plugins::Pictogram::ADD;
     pict.pose.orientation.x = 0.0;
@@ -159,14 +168,12 @@ void CheckpointManager::PublishCheckpointMarker_(void)
 
 void CheckpointManager::PublishCheckpointArray_(void)
 {
-    ros::Rate loop_rate(20);
+    ros::Rate loop_rate(10);
     while(ros::ok())
     {
-        CheckpointManager::PublishCheckpointMarker_();
-
         current_time_ = ros::Time::now();
+        CheckpointManager::PublishCheckpointMarker_();
         cp_states_.header.stamp = current_time_;
-
         cp_states_pub_.publish(cp_states_);
 
         loop_rate.sleep();

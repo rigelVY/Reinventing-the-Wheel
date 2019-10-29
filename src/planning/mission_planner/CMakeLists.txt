@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roscpp
   rostate_machine
+  checkpoint_msgs
 )
 
 catkin_package(
