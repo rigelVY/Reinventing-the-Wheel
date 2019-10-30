@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="checkpoints_csv" default="$(find checkpoint_manager)/../../data/checkpoint/checkpoints.csv" />
+  <arg name="checkpoints_csv" default="$(find checkpoint_manager)/../../data/checkpoint/saved_checkpoints.csv" />
   <arg name="state_array_topic" default="/checkpoint_manager/state" />
   <arg name="pict_marker_topic" default="/checkpoint_manager/pict_marker" />
   <arg name="circle_marker_topic" default="/checkpoint_manager/circle_marker" />
