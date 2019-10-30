@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- <arg name="path_topic" default="/waypoints_raw" />
+  <arg name="waypoints_csv" default="$(find astar_planner)/../../data/waypoint/waypoints.csv" />
+  <arg name="map_frame" default="map" /> -->
+
+  <node name="astar_planner_node" pkg="astar_planner" type="astar_planner_node" output="screen" respawn="true" >
+    <!-- <param name="path_topic" value="$(arg path_topic)" />
+    <param name="waypoints_csv" value="$(arg waypoints_csv)" />
+    <param name="map_frame" value="$(arg map_frame)" /> -->
+  </node>
+</launch>
