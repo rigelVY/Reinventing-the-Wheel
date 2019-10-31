@@ -2,7 +2,7 @@
 <launch>
   <arg name="map_frame" default="/map" />
   <arg name="twist_topic" default="/cmd_vel" />
-  <arg name="path_topic" default="/waypoints_raw" />
+  <arg name="path_topic" default="/waypoint_selector/path" />
   <arg name="current_pose_topic" default="/current_pose" />
   <arg name="opt_path_topic" default="/dwa/opt_path_points" />
   <arg name="target_marker_topic" default="/dwa/target_point" />
