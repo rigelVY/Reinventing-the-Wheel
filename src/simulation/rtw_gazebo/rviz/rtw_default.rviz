@@ -156,6 +156,8 @@ Visualization Manager:
           Value: false
         lidar_link:
           Value: true
+        map:
+          Value: true
         odom:
           Value: true
         right_wheel_link:
@@ -170,7 +172,31 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        map:
+          odom:
+            base_link:
+              base_floor:
+                footrest_link:
+                  {}
+                frontwheel_left:
+                  {}
+                frontwheel_right:
+                  {}
+                left_wheel_link:
+                  {}
+                right_wheel_link:
+                  {}
+              camera_link:
+                {}
+              gps_link:
+                {}
+              imu_link:
+                {}
+              lidar_link:
+                {}
+              velodyne_base_link:
+                velodyne:
+                  {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
@@ -265,7 +291,7 @@ Visualization Manager:
       Radius: 0.029999999329447746
       Shaft Diameter: 0.10000000149011612
       Shaft Length: 0.10000000149011612
-      Topic: /waypoints_raw
+      Topic: /waypoint_selector/path
       Unreliable: false
       Value: true
     - Class: rviz/MarkerArray
@@ -402,10 +428,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7197962403297424
+      Pitch: 0.7547962069511414
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.586816310882568
+      Yaw: 3.7968151569366455
     Saved: ~
 Window Geometry:
   Displays:
