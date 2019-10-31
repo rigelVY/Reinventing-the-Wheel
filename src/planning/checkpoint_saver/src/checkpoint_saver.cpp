@@ -57,7 +57,26 @@ void CheckpointSaver::PublishPointsMarkerArray_(const geometry_msgs::PoseStamped
 
 void CheckpointSaver::CheckpointCallback_(const geometry_msgs::PoseStamped::ConstPtr msg)
 {
-    geometry_msgs::PoseStamped cp_pose = *msg;
+    std::cout << "Set checkpoint." << std::endl;
+
+    tf::TransformListener listener;
+    tf::StampedTransform transform;
+    try
+    {
+        ros::Time now = ros::Time(0);
+        listener.waitForTransform(map_frame_, msg->header.frame_id, now, ros::Duration(5.0));
+        listener.lookupTransform(map_frame_, msg->header.frame_id, now, transform);
+    }
+    catch (tf::TransformException& ex)
+    {
+        ROS_ERROR("%s", ex.what());
+    }
+
+    geometry_msgs::PoseStamped cp_pose;
+    cp_pose.pose.position.x = msg->pose.position.x + transform.getOrigin().x();
+    cp_pose.pose.position.y = msg->pose.position.y + transform.getOrigin().y();
+    cp_pose.pose.position.z = msg->pose.position.z + transform.getOrigin().z();
+    cp_pose.pose.orientation = msg->pose.orientation;
 
     ofs_ << std::fixed << std::setprecision(4) << "," << cp_pose.pose.position.x << "," << cp_pose.pose.position.y << ","
          << cp_pose.pose.position.z << "," << tf::getYaw(cp_pose.pose.orientation) << std::endl;
