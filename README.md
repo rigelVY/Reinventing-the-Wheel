@@ -47,6 +47,7 @@ roslaunch rostate_machine control_state_machine.launch
 roslaunch rostate_machine mission_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=simulation
 roslaunch waypoint_loader waypoint_loader.launch
+roslaunch waypoint_selector waypoint_selector.launch
 roslaunch dummy_localizer dummy_localizer.launch
 roslaunch checkpoint_manager checkpoint_manager.launch
 roslaunch mission_planner mission_planner.launch
@@ -74,9 +75,13 @@ rosrun amcl amcl
 4. launch the RTW nodes.
 ```
 roslaunch rostate_machine control_state_machine.launch
+roslaunch rostate_machine mission_state_machine.launch
 roslaunch whill_interface whill_interface.launch mode:=real
-roslaunch localmap_2d localmap_2d.launch
 roslaunch waypoint_loader waypoint_loader.launch
+roslaunch waypoint_selector waypoint_selector.launch
 roslaunch dummy_localizer dummy_localizer.launch
+roslaunch checkpoint_manager checkpoint_manager.launch
+roslaunch mission_planner mission_planner.launch
+roslaunch localmap_2d localmap_2d.launch
 roslaunch dwa dwa.launch
 ```
