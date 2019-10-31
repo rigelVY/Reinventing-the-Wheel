@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="main_mission_path_topic" default="/main_mission/path" />
+  <arg name="mission_a_path_topic" default="/optional_mission_alpha/path" />
+  <arg name="mission_b_path_topic" default="/optional_mission_bravo/path" />
+  <arg name="mission_c_path_topic" default="/optional_mission_charlie/path" />
+  <arg name="mission_d_path_topic" default="/optional_mission_delta/path" />
+  <arg name="pub_path_topic" default="/waypoint_selector/path" />
+
+  <node name="waypoint_selector_node" pkg="waypoint_selector" type="waypoint_selector_node" output="screen" respawn="true" >
+    <param name="main_mission_path_topic" value="$(arg main_mission_path_topic)" />
+    <param name="mission_a_path_topic" value="$(arg mission_a_path_topic)" />
+    <param name="mission_b_path_topic" value="$(arg mission_b_path_topic)" />
+    <param name="mission_c_path_topic" value="$(arg mission_c_path_topic)" />
+    <param name="mission_d_path_topic" value="$(arg mission_d_path_topic)" />
+    <param name="pub_path_topic" value="$(arg pub_path_topic)" />
+  </node>
+</launch>
