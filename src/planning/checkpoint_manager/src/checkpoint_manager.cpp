@@ -161,6 +161,7 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     for(int i=0; i<cp_states_.states.size(); i++)
     {
         pict.pose.position = cp_states_.states[i].position;
+        pict.pose.position.z += 0.5; // offset
         marker.pose.position = cp_states_.states[i].position;
 
         if(cp_states_.states[i].state == checkpoint_msgs::State::UNPASSED)
