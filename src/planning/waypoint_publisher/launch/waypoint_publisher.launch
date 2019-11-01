@@ -3,7 +3,7 @@
   <arg name="path_topic" default="/waypoints/MissionA" />
   <arg name="map_frame" default="/map" />
 
-  <node name="waypoint_publisher_node" pkg="waypoint_publisher" type="waypoit_publisher_node" output="screen" respawn="true" >
+  <node name="waypoint_publisher_node" pkg="waypoint_publisher" type="waypoint_publisher_node" output="screen" respawn="true" >
     <param name="path_topic" value="$(arg path_topic)" />
     <param name="map_frame" value="$(arg map_frame)" />
   </node>
