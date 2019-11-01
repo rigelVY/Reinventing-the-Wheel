@@ -254,7 +254,14 @@ void DWA::PublishCmdVel_(void)
 
             if(relative_dist > lookahead_dist_) 
             {
-                if(DWA::ObstacleClearanceCheck_(relative_pos)) break;
+                if(map_.getLength().x()/2.0 > abs(relative_pos.x) && map_.getLength().y()/2.0 > abs(relative_pos.y))
+                {
+                    if(DWA::ObstacleClearanceCheck_(relative_pos)) break;
+                }
+                else
+                {
+                    break;
+                }               
             }
         }
         target_relative_dist_ = relative_dist;

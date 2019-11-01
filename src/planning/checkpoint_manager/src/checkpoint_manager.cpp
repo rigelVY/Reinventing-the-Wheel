@@ -142,7 +142,6 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     pict.pose.orientation.w = cos(-M_PI/4.0);
 
     visualization_msgs::MarkerArray circle_markers;
-    // static int id = 0;
     visualization_msgs::Marker marker;
     marker.id = 0;
     marker.header.stamp = current_time_;
@@ -161,6 +160,7 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     for(int i=0; i<cp_states_.states.size(); i++)
     {
         pict.pose.position = cp_states_.states[i].position;
+        pict.pose.position.z += 0.5; // offset
         marker.pose.position = cp_states_.states[i].position;
 
         if(cp_states_.states[i].state == checkpoint_msgs::State::UNPASSED)

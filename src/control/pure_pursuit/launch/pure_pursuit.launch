@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="twist_topic" default="/cmd_vel" />
-  <arg name="path_topic" default="/waypoints_raw" />
+  <arg name="path_topic" default="/waypoint_selector/path" />
   <arg name="current_pose_topic" default="/current_pose" />
   <arg name="linear_velocity" default="0.3" />
   <arg name="lookahead_distance" default="0.5" />
