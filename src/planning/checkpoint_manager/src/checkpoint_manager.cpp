@@ -142,7 +142,6 @@ void CheckpointManager::PublishCheckpointMarker_(void)
     pict.pose.orientation.w = cos(-M_PI/4.0);
 
     visualization_msgs::MarkerArray circle_markers;
-    // static int id = 0;
     visualization_msgs::Marker marker;
     marker.id = 0;
     marker.header.stamp = current_time_;
