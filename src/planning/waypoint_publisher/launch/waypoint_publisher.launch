@@ -1,4 +1,4 @@
-<?xml vertion="1.0"?>
+<?xml version="1.0"?>
 <launch>
   <arg name="path_topic" default="/waypoints/MissionA" />
   <arg name="map_frame" default="/map" />
