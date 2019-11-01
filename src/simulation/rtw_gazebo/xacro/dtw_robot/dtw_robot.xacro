@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="dtw_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/dtw_robot</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <!-- Include Base Body -->
+  <xacro:include filename="$(find rtw_gazebo)/xacro/dtw_robot/base/base.xacro"/>
+  <!-- Include Sensors -->
+  <xacro:include filename="$(find rtw_gazebo)/xacro/dtw_robot/sensor/sensor.xacro"/>
+</robot>

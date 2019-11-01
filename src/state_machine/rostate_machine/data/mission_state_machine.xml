@@ -1,0 +1,19 @@
+<state_machine>
+    <init_state name="main_mission"/>
+    <state_machine_name name="mission_state_machine"/>
+
+    <callback tag="main_mission" when="always" states="main_mission"/>
+    <callback tag="optional_mission_A" when="always" states="optional_mission_A"/>
+    <callback tag="optional_mission_B" when="always" states="optional_mission_B"/>
+    <callback tag="optional_mission_C" when="always" states="optional_mission_C"/>
+    <callback tag="optional_mission_D" when="always" states="optional_mission_D"/>
+
+    <transition from = "main_mission" to="optional_mission_A" name="start_mission_A"/>
+    <transition from = "main_mission" to="optional_mission_B" name="start_mission_B"/>
+    <transition from = "main_mission" to="optional_mission_C" name="start_mission_C"/>
+    <transition from = "main_mission" to="optional_mission_D" name="start_mission_D"/>
+    <transition from = "optional_mission_A" to="main_mission" name="back_to_main_mission"/>
+    <transition from = "optional_mission_B" to="main_mission" name="back_to_main_mission"/>
+    <transition from = "optional_mission_C" to="main_mission" name="back_to_main_mission"/>
+    <transition from = "optional_mission_D" to="main_mission" name="back_to_main_mission"/>
+</state_machine>

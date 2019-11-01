@@ -3,7 +3,7 @@
 DummyLocalizer::DummyLocalizer(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh),tf_listener_(tf_buffer_)
 {
     pnh_.param<std::string>("base_frame", base_frame_, "base_link");
-    pnh_.param<std::string>("map_frame", map_frame_, "odom");
+    pnh_.param<std::string>("map_frame", map_frame_, "map");
     pnh_.param<std::string>("pose_topic", pose_topic_, "current_pose");
     current_pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(pose_topic_, 10);
     boost::thread publish_thread(boost::bind(&DummyLocalizer::PublishCurrentPoseStamped_, this));

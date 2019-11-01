@@ -1,0 +1,46 @@
+digraph G {
+graph [bgcolor=white]
+0 [color=black,fontsize=12,shape=ellipse,label="manual_driving"]
+;
+1 [color=black,fontsize=12,shape=ellipse,label="autonomous_driving"]
+;
+2 [color=blue,fontsize=12,shape=ellipse,label="stopping"]
+[fontcolor=blue]
+;
+0->1 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="system_bringup"]
+;
+0->2 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="stop"]
+;
+1->0 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="manual_override"]
+;
+1->2 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="stop"]
+;
+2->0 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="recovery_manual"]
+;
+2->1 [color=gray]
+[fontsize=12]
+[style=solid]
+[fontcolor=black]
+[label="recovery_autonomous"]
+;
+}

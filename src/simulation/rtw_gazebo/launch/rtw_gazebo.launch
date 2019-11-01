@@ -3,11 +3,18 @@
   <arg name="rvizconfig" default="$(find rtw_gazebo)/rviz/rtw_default.rviz" />
   <arg name="world" default="test_field_01.world"/>
   <arg name="odom_data" default="wheel" />
+  <arg name="model" default="whill_modelc" />
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+  <node name="joy_node" pkg="joy" type="joy_node" required="true" >
+    <param name="autorepeat_rate" value="30" />
+  </node>
+
 
   <include file="$(find rtw_gazebo)/launch/sim_world.launch">  
     <arg name="world" value="$(arg world)"/>
     <arg name="odom_data" value="$(arg odom_data)" />
+    <arg name="model" value="$(arg model)" />
   </include>
 </launch>

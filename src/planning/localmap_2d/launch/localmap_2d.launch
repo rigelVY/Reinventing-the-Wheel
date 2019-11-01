@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="data_type" default="LaserScan" />
+  <arg name="base_frame" default="base_link" />
+  <arg name="sensor_frame" default="velodyne" />
+  <arg name="laser_topic" default="scan" />
+  <arg name="grid_map_topic" default="/local_grid_map" />
+  <arg name="map_width" default="6.0" />
+  <arg name="map_height" default="6.0" />
+  <arg name="resolution" default="0.1" />
+  <arg name="costmap_grad" default="1.0" />
+
+  <node name="localmap_2d_node" pkg="localmap_2d" type="localmap_2d_node" output="screen" respawn="true" >
+    <param name="data_type" value="$(arg data_type)" />
+    <param name="base_frame" value="$(arg base_frame)" />
+    <param name="sensor_frame" value="$(arg sensor_frame)" />
+    <param name="laser_topic" value="$(arg laser_topic)" />
+    <param name="grid_map_topic" value="$(arg grid_map_topic)" />
+    <param name="map_width" value="$(arg map_width)" />
+    <param name="map_height" value="$(arg map_height)" />
+    <param name="resolution" value="$(arg resolution)" />
+    <param name="costmap_grad" value="$(arg costmap_grad)" />
+  </node>
+
+  <!-- Launch the grid map visualizer -->
+  <node pkg="grid_map_visualization" type="grid_map_visualization" name="grid_map_visualization" output="screen">
+    <rosparam command="load" file="$(find localmap_2d)/config/localmap_2d.yaml" />
+  </node>
+</launch>

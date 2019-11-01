@@ -1,0 +1,6 @@
+[submodule "src/util/ros_whill"]
+	path = src/util/ros_whill
+	url = https://github.com/WHILL/ros_whill.git
+[submodule "src/simulation/plugins/rostate_machine_rviz_plugins"]
+	path = src/simulation/plugins/rostate_machine_rviz_plugins
+	url = https://github.com/OUXT-Polaris/rostate_machine_rviz_plugins.git

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="cp_marker_topic" default="/checkpoint_saver_array" />
+  <arg name="checkpoints_csv" default="$(find checkpoint_saver)/../../data/checkpoint/saved_checkpoints.csv" />
+  <arg name="map_frame" default="map" />
+
+  <node name="checkpoint_saver_node" pkg="checkpoint_saver" type="checkpoint_saver_node" output="screen" respawn="true" >
+    <param name="cp_marker_topic" value="$(arg cp_marker_topic)" />
+    <param name="checkpoints_csv" value="$(arg checkpoints_csv)" />
+    <param name="map_frame" value="$(arg map_frame)" />
+  </node>
+</launch>

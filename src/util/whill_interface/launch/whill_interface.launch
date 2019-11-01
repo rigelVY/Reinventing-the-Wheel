@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mode" default="simulation" />  <!--select "simulation" or "real"-->
+  <arg name="pub_twist_topic" default="/whill_modelc/diff_drive_controller/cmd_vel" />
+  <arg name="pub_joy_topic" default="/whill/controller/joy" />
+  <arg name="sub_twist_topic" default="/cmd_vel" />
+  <arg name="sub_joy_topic" default="/joy" />
+
+  <node name="whill_interface_node" pkg="whill_interface" type="whill_interface_node" output="screen" respawn="true" >
+    <param name="mode" value="$(arg mode)" />
+    <param name="pub_twist_topic" value="$(arg pub_twist_topic)" />
+    <param name="pub_joy_topic" value="$(arg pub_joy_topic)" />
+    <param name="sub_twist_topic" value="$(arg sub_twist_topic)" />
+    <param name="sub_joy_topic" value="$(arg sub_joy_topic)" />
+  </node>
+</launch>
