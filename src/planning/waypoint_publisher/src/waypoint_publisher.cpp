@@ -5,7 +5,7 @@ WaypointPublisher::WaypointPublisher(ros::NodeHandle nh, ros::NodeHandle pnh) : 
     pnh_.param<std::string>("path_topic", path_topic_, "/waypoints/MissionA");
     pnh_.param<std::string>("map_frame", map_frame_, "map");
     wps_pub_ = nh_.advertise<nav_msgs::Path>(path_topic_, 10);
-    WaypointPublisher::CreatWaypoint_();
+    WaypointPublisher::WaypointPublisherArray_();
     boost::thread wp_publisher_thread(boost::bind(&WaypointPublisher::PublishWaypoints_, this));
 }
 
@@ -14,25 +14,30 @@ WaypointPublisher::~WaypointPublisher()
 
 }
 
-void WaypointPublisher::CreatWaypoint_(void)
+void WaypointPublisher::WaypointPublisherArray_(void)
 {
+    current_time_ = ros::Time::now();
+    wps_.header.stamp = current_time_;
+    wps_.header.frame_id = map_frame_;
+   
     for(int i=0; i<20; i++)
     {
-        double x = i * 0.5;
-        current_time_ = ros::Time::now();
-        wps_.header.stamp = current_time_;
-        wps_.header.frame_id = map_frame_;
         geometry_msgs::PoseStamped wp;
-
-        wp.pose.position.x = i;
-        wp.pose.position.y = std::sin(x);
-        wp.pose.position.z = 0;
-        wp.header.stamp = current_time_;
-        wp.header.frame_id = map_frame_;
+        CreatWaypoint_(i ,&wp);
         wps_.poses.push_back(wp);
     }
-    return;
-}         
+}       
+
+void WaypointPublisher::CreatWaypoint_(int k, geometry_msgs::PoseStamped* wp)
+{
+    double x = k * 0.5;
+    wp->pose.position.x = k;
+    wp->pose.position.y = std::sin(x);
+    wp->pose.position.z = 0;
+    wp->header.stamp = current_time_;
+    wp->header.frame_id = map_frame_;
+   
+} 
     
 void WaypointPublisher::PublishWaypoints_(void)
 {

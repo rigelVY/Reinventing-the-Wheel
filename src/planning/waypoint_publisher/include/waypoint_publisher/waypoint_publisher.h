@@ -20,8 +20,8 @@ public:
     ~WaypointPublisher();
 private:
     void PublishWaypoints_(void);
-    void CreatWaypoint_(void);
-    
+    void CreatWaypoint_(int k, geometry_msgs::PoseStamped* wp);
+    void WaypointPublisherArray_(void);    
    
     ros::NodeHandle nh_;
     ros::NodeHandle pnh_;
