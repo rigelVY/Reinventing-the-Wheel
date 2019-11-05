@@ -37,7 +37,7 @@ private:
     std::vector<std::vector<DWA::path_point>> CreateCandidatePaths_(double dt, double move_time, double resolution);
     double ObstacleCost_(std::vector<DWA::path_point> path);
     double LinearVelCost_(double linear_vel);
-    double HeadingGoalCost_(double terminal_angle);
+    double HeadingGoalCost_(DWA::path_point terminal_point);
     void PublishOptimizedPath_(std::vector<DWA::path_point> opt_path);
     double EvaluatePath_(double dt, double move_time);
     bool ObstacleClearanceCheck_(geometry_msgs::Point target_position);
@@ -76,11 +76,10 @@ private:
     ros::Subscriber current_pose_sub_;
     ros::Subscriber local_gridmap_sub_;
 
-    double target_relative_dist_, target_relative_angle_;
+    geometry_msgs::Point target_pos_;
     double optimal_linear_vel_, optimal_angular_vel_;
-    int previous_nearest_index_;
 
-    int current_pose_received_;
+    bool current_pose_received_, waypoints_raw_received_, grid_map_received_;
 };
 
 #endif  //DWA_DWA_H_INCLUDED

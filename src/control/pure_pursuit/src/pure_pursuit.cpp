@@ -15,7 +15,7 @@ PurePursuit::PurePursuit(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(
 
 PurePursuit::~PurePursuit()
 {
-
+    
 }
 
 void PurePursuit::WaypointsRawCallback_(const nav_msgs::Path::ConstPtr msg)

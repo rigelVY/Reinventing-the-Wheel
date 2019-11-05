@@ -1,6 +1,6 @@
 #include <dwa/dwa.h>
 
-DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
+DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh),current_pose_received_(false),waypoints_raw_received_(false),grid_map_received_(false)
 {
     pnh_.param<std::string>("map_frame", map_frame_, "map");
     pnh_.param<std::string>("twist_topic", twist_topic_, "cmd_vel");
@@ -26,8 +26,6 @@ DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh)
     current_pose_sub_ = nh_.subscribe(current_pose_topic_, 1, &DWA::CurrentPoseCallback_, this);
     local_gridmap_sub_= nh_.subscribe(grid_map_topic_, 1, &DWA::LocalGridMapCallback_, this);
     boost::thread publish_thread(boost::bind(&DWA::PublishCmdVel_, this));
-
-    current_pose_received_ = 0;
 }
 
 DWA::~DWA()
@@ -38,19 +36,21 @@ DWA::~DWA()
 void DWA::WaypointsRawCallback_(const nav_msgs::Path::ConstPtr msg)
 {
     wps_ = *msg;
+    waypoints_raw_received_ = true;
     return;
 }
 
 void DWA::CurrentPoseCallback_(const geometry_msgs::PoseStamped::ConstPtr msg)
 {
     current_pose_ = *msg;
-    current_pose_received_ = 1;
+    current_pose_received_ = true;
     return;
 }
 
 void DWA::LocalGridMapCallback_(const grid_map_msgs::GridMap::ConstPtr msg)
 {
     grid_map::GridMapRosConverter::fromMessage(*msg, map_);
+    grid_map_received_ = true;
     return;
 }
 
@@ -97,10 +97,13 @@ double DWA::ObstacleCost_(std::vector<DWA::path_point> path)
         grid_map::Position position;
         position.x() = path[i].x - current_pose_.pose.position.x;
         position.y() = path[i].y - current_pose_.pose.position.y;
-        double cost = map_.atPosition("cost_map", position);
-        if(worst_cost < cost) worst_cost = cost;
-    }
 
+        if(map_.isInside(position))
+        {
+            double cost = map_.atPosition("cost_map", position);
+            if(worst_cost < cost) worst_cost = cost;
+        }
+    }
     return worst_cost;
 }
 
@@ -109,9 +112,10 @@ double DWA::LinearVelCost_(double linear_vel)
     return (max_linear_vel_ - linear_vel) / max_linear_vel_;
 }
 
-double DWA::HeadingGoalCost_(double terminal_angle)
+double DWA::HeadingGoalCost_(DWA::path_point terminal_point)
 {
-    return abs(terminal_angle - target_relative_angle_) / M_PI;
+    double error_angle = atan2(target_pos_.y-terminal_point.y, target_pos_.x-terminal_point.x) - terminal_point.theta;
+    return abs(error_angle) / M_PI;
 }
 
 void DWA::PublishOptimizedPath_(std::vector<DWA::path_point> opt_path)
@@ -149,13 +153,12 @@ double DWA::EvaluatePath_(double dt, double move_time)
     paths = DWA::CreateCandidatePaths_(dt, move_time, resolution);
 
     double optimal_cost = 10.0;
-
     for(int i=0; i<paths.size(); i++)
     {
         double obs_cost, vel_cost, angle_cost, total_cost;
         obs_cost = DWA::ObstacleCost_(paths[i]);
-        vel_cost = DWA::LinearVelCost_(paths[i][0].lin_v);
-        angle_cost = DWA::HeadingGoalCost_(paths[i].back().theta);   
+        vel_cost = DWA::LinearVelCost_(paths[i].back().lin_v);
+        angle_cost = DWA::HeadingGoalCost_(paths[i].back());   
 
         total_cost = weight_obs_ * obs_cost + weight_vel_ * vel_cost + weight_angle_ * angle_cost; 
 
@@ -165,7 +168,7 @@ double DWA::EvaluatePath_(double dt, double move_time)
             opt_path = paths[i];
         }
     }
-
+    
     optimal_linear_vel_ = opt_path.back().lin_v;
     optimal_angular_vel_ = opt_path.back().ang_v;
 
@@ -217,17 +220,19 @@ void DWA::PublishTargetMarker_(geometry_msgs::PoseStamped target_pose)
 
 void DWA::PublishCmdVel_(void)
 {
+    int previous_nearest_index = 0;
+
     ros::Rate loop_rate(10);
     while(ros::ok())
     {
-        if(!current_pose_received_) continue;
+        if(!current_pose_received_ || !waypoints_raw_received_ || !grid_map_received_) continue;
 
-        int min_search_window = std::max(previous_nearest_index_-target_search_interval_, 0);
-        int max_search_window = std::min(previous_nearest_index_+target_search_interval_, (int)wps_.poses.size());
+        int min_search_window = std::max(previous_nearest_index-target_search_interval_, 0);
+        int max_search_window = std::min(previous_nearest_index+target_search_interval_, (int)wps_.poses.size());
         
         int nearest_index;
         geometry_msgs::Point relative_pos;
-        double relative_dist, nearest_relative_dist, relative_angle;
+        double relative_dist, nearest_relative_dist;
 
         relative_pos.x = wps_.poses[min_search_window].pose.position.x - current_pose_.pose.position.x;
         relative_pos.y = wps_.poses[min_search_window].pose.position.y - current_pose_.pose.position.y;
@@ -242,7 +247,7 @@ void DWA::PublishCmdVel_(void)
             if(nearest_relative_dist < relative_dist) break;
             nearest_relative_dist = relative_dist;
         }
-        previous_nearest_index_ = nearest_index;
+        previous_nearest_index = nearest_index;
 
         int target_index;
         for(target_index=nearest_index; target_index<max_search_window; target_index++)
@@ -250,7 +255,6 @@ void DWA::PublishCmdVel_(void)
             relative_pos.x = wps_.poses[target_index].pose.position.x - current_pose_.pose.position.x;
             relative_pos.y = wps_.poses[target_index].pose.position.y - current_pose_.pose.position.y;
             relative_dist = sqrt(pow(relative_pos.x, 2) + pow(relative_pos.y, 2));
-            relative_angle = atan2(relative_pos.y, relative_pos.x) - tf::getYaw(current_pose_.pose.orientation);
 
             if(relative_dist > lookahead_dist_) 
             {
@@ -261,14 +265,13 @@ void DWA::PublishCmdVel_(void)
                 else
                 {
                     break;
-                }               
+                }  
             }
         }
-        target_relative_dist_ = relative_dist;
-        target_relative_angle_ = relative_angle;
+        target_pos_ = wps_.poses[target_index].pose.position;
         DWA::PublishTargetMarker_(wps_.poses[target_index]);
         
-        double dt = 0.02, move_time = 0.4;
+        double dt = 0.04, move_time = 0.4;
         DWA::EvaluatePath_(dt, move_time);
 
         geometry_msgs::Twist cmd_vel;
