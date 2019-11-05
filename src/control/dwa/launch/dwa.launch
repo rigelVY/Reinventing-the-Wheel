@@ -6,15 +6,15 @@
   <arg name="current_pose_topic" default="/current_pose" />
   <arg name="opt_path_topic" default="/dwa/opt_path_points" />
   <arg name="target_marker_topic" default="/dwa/target_point" />
-  <arg name="target_search_interval" default="10" />
-  <arg name="max_linear_vel" default="0.5" />
+  <arg name="target_search_interval" default="5" />
+  <arg name="max_linear_vel" default="1.0" />
   <arg name="min_linear_vel" default="0.02" />
-  <arg name="max_angular_vel" default="2.0" />
-  <arg name="min_angular_vel" default="-2.0" />
+  <arg name="max_angular_vel" default="3.0" />
+  <arg name="min_angular_vel" default="-3.0" />
   <arg name="lookahead_distance" default="1.0" />
-  <arg name="weight_obs" default="0.6" />
+  <arg name="weight_obs" default="0.5" />
   <arg name="weight_vel" default="0.1" />
-  <arg name="weight_angle" default="0.3" />
+  <arg name="weight_angle" default="0.4" />
   <arg name="obs_avoid_threshold" default="0.6" />
 
   <node name="dwa_node" pkg="dwa" type="dwa_node" output="screen" respawn="true" >
