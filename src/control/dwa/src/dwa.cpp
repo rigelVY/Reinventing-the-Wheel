@@ -271,7 +271,7 @@ void DWA::PublishCmdVel_(void)
         target_pos_ = wps_.poses[target_index].pose.position;
         DWA::PublishTargetMarker_(wps_.poses[target_index]);
         
-        double dt = 0.02, move_time = 0.2;
+        double dt = 0.02, move_time = 0.4;
         DWA::EvaluatePath_(dt, move_time);
 
         geometry_msgs::Twist cmd_vel;
