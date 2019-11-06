@@ -10,7 +10,7 @@ LocalMap2D::LocalMap2D(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pn
     pnh_.param<double>("map_width", map_width_, 1.2);
     pnh_.param<double>("map_height", map_height_, 2.0);
     pnh_.param<double>("resolution", resolution_, 0.05);
-    pnh_.param<double>("costmap_grad", costmap_grad_, 1.0);
+    pnh_.param<double>("obstacle_buffer", obstacle_buffer_, 1.0);
     grid_map_pub_ = nh_.advertise<grid_map_msgs::GridMap>(grid_map_topic_, 1);
     laser_sub_ = nh_.subscribe(laser_topic_, 1, &LocalMap2D::LaserScanCallback_, this);
 
@@ -50,8 +50,7 @@ void LocalMap2D::GetTransformLidarToBase(void)
 void LocalMap2D::LaserScanCallback_(const sensor_msgs::LaserScan::ConstPtr msg)
 {
     map_.clearAll(); // initialize the map
-    obstacles_index_.clear();
-    obstacles_index_.reserve((int)(map_width_*map_height_/(resolution_*resolution_)));
+    obstacles_pos_.clear();
     LocalMap2D::LaserScanToGridMap_(msg);
     LocalMap2D::GridMapToCostMap_();
 
@@ -75,11 +74,9 @@ void LocalMap2D::LaserScanToGridMap_(const sensor_msgs::LaserScan::ConstPtr lase
         position.x() = range * cos(angle) + lidar_offset_.x();
         position.y() = range * sin(angle) + lidar_offset_.y();
         if(map_width_/2.0 < abs(position.x()) || map_height_/2.0 < abs(position.y())) continue;
-        grid_map::Index index;
-        map_.getIndex(position, index);
-        map_.at("occgrid_map", index) = 1.0;
+        map_.atPosition("occgrid_map", position) = 1.0;
 
-        obstacles_index_.emplace_back(index);
+        obstacles_pos_.emplace_back(position);
     }
     return;
 }
@@ -92,14 +89,13 @@ void LocalMap2D::GridMapToCostMap_(void)
         map_.getPosition(*it, position);
 
         double obs_dist_square, nearest_obs_dist_square = 100.0;
-        grid_map::Position obs_pos;
-        for(int i=0; i<obstacles_index_.size(); i++)
+        for(int i=0; i<obstacles_pos_.size(); i++)
         {
-            map_.getPosition(obstacles_index_[i], obs_pos);
-            obs_dist_square = std::pow((obs_pos.x() - position.x()), 2) + std::pow((obs_pos.y() - position.y()), 2);
+            obs_dist_square = pow((obstacles_pos_[i].x() - position.x()), 2) + pow((obstacles_pos_[i].y() - position.y()), 2);
             if(obs_dist_square < nearest_obs_dist_square) nearest_obs_dist_square = obs_dist_square;
         }
-        map_.at("cost_map", *it) = exp(-nearest_obs_dist_square / std::pow(costmap_grad_, 2));
+    
+        map_.at("cost_map", *it) = obstacle_buffer_ / sqrt(nearest_obs_dist_square);
     }
     return;
 }
