@@ -10,10 +10,14 @@ DWA::DWA(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),pnh_(pnh),current_pos
     pnh_.param<std::string>("opt_path_topic", opt_path_topic_, "dwa/opt_path_points");
     pnh_.param<std::string>("target_marker_topic", target_marker_topic_, "dwa/target_point");
     pnh_.param<int>("target_search_interval", target_search_interval_, 10);
-    pnh_.param<double>("max_linear_vel", max_linear_vel_, 1.0);
-    pnh_.param<double>("min_linear_vel", min_linear_vel_, 0.05);
-    pnh_.param<double>("max_angular_vel", max_angular_vel_, 0.5);
-    pnh_.param<double>("min_angular_vel", min_angular_vel_, -0.5);
+    pnh_.param<double>("linear_vel_max", linear_vel_max_, 1.0);
+    pnh_.param<double>("linear_vel_min", linear_vel_min_, 0.05);
+    pnh_.param<double>("linear_vel_resolution", linear_vel_resolution_, 0.1);
+    pnh_.param<double>("angular_vel_max", angular_vel_max_, 0.5);
+    pnh_.param<double>("angular_vel_min", angular_vel_min_, -0.5);
+    pnh_.param<double>("angular_vel_resolution", angular_vel_resolution_, 0.1);
+    pnh_.param<double>("path_time_length", path_time_length_, 0.4);
+    pnh_.param<double>("path_time_resolution", path_time_resolution_, 0.04);
     pnh_.param<double>("lookahead_distance", lookahead_dist_, 0.5);
     pnh_.param<double>("weight_obs", weight_obs_, 1.0);
     pnh_.param<double>("weight_vel", weight_vel_, 1.0);
@@ -54,10 +58,10 @@ void DWA::LocalGridMapCallback_(const grid_map_msgs::GridMap::ConstPtr msg)
     return;
 }
 
-std::vector<DWA::path_point> DWA::CreatePath_(double linear_vel, double angular_vel, double dt, double move_time)
+std::vector<DWA::path_point> DWA::CreatePath_(double linear_vel, double angular_vel)
 {
     std::vector<DWA::path_point> path;
-    path.reserve(std::ceil(move_time/dt));
+    path.reserve(std::ceil(path_time_length_/path_time_resolution_));
     DWA::path_point point;
     point.x = current_pose_.pose.position.x;
     point.y = current_pose_.pose.position.y;
@@ -65,7 +69,7 @@ std::vector<DWA::path_point> DWA::CreatePath_(double linear_vel, double angular_
     point.lin_v = linear_vel;
     point.ang_v = angular_vel;
 
-    for(double t=0.0; t<move_time; t+=dt)
+    for(double t=0.0; t<path_time_length_; t+=path_time_resolution_)
     {
         point.x += linear_vel * cos(point.theta) * t;
         point.y += linear_vel * sin(point.theta) * t;
@@ -75,14 +79,14 @@ std::vector<DWA::path_point> DWA::CreatePath_(double linear_vel, double angular_
     return path;
 }
 
-std::vector<std::vector<DWA::path_point>> DWA::CreateCandidatePaths_(double dt, double move_time, double resolution)
+std::vector<std::vector<DWA::path_point>> DWA::CreateCandidatePaths_(void)
 {
     std::vector<std::vector<DWA::path_point>> paths;
-    for(double lin_v=min_linear_vel_; lin_v<max_linear_vel_; lin_v+=resolution)
+    for(double lin_v=linear_vel_min_; lin_v<linear_vel_max_; lin_v+=linear_vel_resolution_)
     {
-        for(double ang_v=min_angular_vel_; ang_v<max_angular_vel_; ang_v+=resolution)
+        for(double ang_v=angular_vel_min_; ang_v<angular_vel_max_; ang_v+=angular_vel_resolution_)
         {
-            paths.emplace_back(CreatePath_(lin_v, ang_v, dt, move_time));
+            paths.emplace_back(CreatePath_(lin_v, ang_v));
         }
     }
     return paths;
@@ -109,7 +113,7 @@ double DWA::ObstacleCost_(std::vector<DWA::path_point> path)
 
 double DWA::LinearVelCost_(double linear_vel)
 {
-    return (max_linear_vel_ - linear_vel) / max_linear_vel_;
+    return (linear_vel_max_ - linear_vel) / linear_vel_max_;
 }
 
 double DWA::HeadingGoalCost_(DWA::path_point terminal_point)
@@ -145,12 +149,11 @@ void DWA::PublishOptimizedPath_(std::vector<DWA::path_point> opt_path)
     opt_path_pub_.publish(path_points);
 }
 
-double DWA::EvaluatePath_(double dt, double move_time)
+double DWA::EvaluatePath_(void)
 {
     std::vector<std::vector<DWA::path_point>> paths;
     std::vector<DWA::path_point> opt_path;
-    double resolution = 0.1;
-    paths = DWA::CreateCandidatePaths_(dt, move_time, resolution);
+    paths = DWA::CreateCandidatePaths_();
 
     double optimal_cost = 10.0;
     for(int i=0; i<paths.size(); i++)
@@ -228,7 +231,7 @@ void DWA::PublishCmdVel_(void)
         if(!current_pose_received_ || !waypoints_raw_received_ || !grid_map_received_) continue;
 
         int min_search_window = std::max(previous_nearest_index-target_search_interval_, 0);
-        int max_search_window = std::min(previous_nearest_index+target_search_interval_, (int)wps_.poses.size());
+        int max_search_window = std::min(previous_nearest_index+target_search_interval_, (int)wps_.poses.size()-1);
         
         int nearest_index;
         geometry_msgs::Point relative_pos;
@@ -271,8 +274,7 @@ void DWA::PublishCmdVel_(void)
         target_pos_ = wps_.poses[target_index].pose.position;
         DWA::PublishTargetMarker_(wps_.poses[target_index]);
         
-        double dt = 0.04, move_time = 0.4;
-        DWA::EvaluatePath_(dt, move_time);
+        DWA::EvaluatePath_();
 
         geometry_msgs::Twist cmd_vel;
         cmd_vel.linear.x = optimal_linear_vel_;
