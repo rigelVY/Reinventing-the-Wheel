@@ -7,10 +7,14 @@
   <arg name="opt_path_topic" default="/dwa/opt_path_points" />
   <arg name="target_marker_topic" default="/dwa/target_point" />
   <arg name="target_search_interval" default="5" />
-  <arg name="max_linear_vel" default="1.0" />
-  <arg name="min_linear_vel" default="0.02" />
-  <arg name="max_angular_vel" default="3.0" />
-  <arg name="min_angular_vel" default="-3.0" />
+  <arg name="linear_vel_max" default="1.0" />
+  <arg name="linear_vel_min" default="0.02" />
+  <arg name="linear_vel_resolution" default="0.1" />
+  <arg name="angular_vel_max" default="3.0" />
+  <arg name="angular_vel_min" default="-3.0" />
+  <arg name="angular_vel_resolution" default="0.2" />
+  <arg name="path_time_length" default="0.4" />
+  <arg name="path_time_resolution" default="0.04" />
   <arg name="lookahead_distance" default="1.5" />
   <arg name="weight_obs" default="0.5" />
   <arg name="weight_vel" default="0.1" />
@@ -25,10 +29,14 @@
     <param name="opt_path_topic" value="$(arg opt_path_topic)" />
     <param name="target_marker_topic" value="$(arg target_marker_topic)" />
     <param name="target_search_interval" value="$(arg target_search_interval)" />
-    <param name="max_linear_vel" value="$(arg max_linear_vel)" />
-    <param name="min_linear_vel" value="$(arg min_linear_vel)" />
-    <param name="max_angular_vel" value="$(arg max_angular_vel)" />
-    <param name="min_angular_vel" value="$(arg min_angular_vel)" />
+    <param name="linear_vel_max" value="$(arg linear_vel_max)" />
+    <param name="linear_vel_min" value="$(arg linear_vel_min)" />
+    <param name="linear_vel_resolution" value="$(arg linear_vel_resolution)" />
+    <param name="angular_vel_max" value="$(arg angular_vel_max)" />
+    <param name="angular_vel_min" value="$(arg angular_vel_min)" />
+    <param name="angular_vel_resolution" value="$(arg angular_vel_resolution)" />
+    <param name="path_time_length" value="$(arg path_time_length)" />
+    <param name="path_time_resolution" value="$(arg path_time_resolution)" />
     <param name="lookahead_distance" value="$(arg lookahead_distance)" />
     <param name="weight_obs" value="$(arg weight_obs)" />
     <param name="weight_vel" value="$(arg weight_vel)" />
