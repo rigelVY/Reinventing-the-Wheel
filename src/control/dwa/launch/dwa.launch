@@ -12,7 +12,7 @@
   <arg name="linear_vel_resolution" default="0.1" />
   <arg name="angular_vel_max" default="3.0" />
   <arg name="angular_vel_min" default="-3.0" />
-  <arg name="angular_vel_resolution" default="0.1" />
+  <arg name="angular_vel_resolution" default="0.2" />
   <arg name="path_time_length" default="0.4" />
   <arg name="path_time_resolution" default="0.04" />
   <arg name="lookahead_distance" default="1.5" />
