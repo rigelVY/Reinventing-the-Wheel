@@ -232,7 +232,6 @@ void DWA::PublishCmdVel_(void)
 
         int min_search_window = std::max(previous_nearest_index-target_search_interval_, 0);
         int max_search_window = std::min(previous_nearest_index+target_search_interval_, (int)wps_.poses.size()-1);
-        printf("%d  %d\n", min_search_window, max_search_window);
         
         int nearest_index;
         geometry_msgs::Point relative_pos;
