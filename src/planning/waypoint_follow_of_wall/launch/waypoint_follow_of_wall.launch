@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="path_topic" default="/waypoints/MissionA" />
+  <arg name="map_frame" default="/map" />
+  <arg name="gridmap_topic" default="/gridmap" />
+
+  <node name="waypoint_follow_of_wall_node" pkg="waypoint_follow_of_wall" type="waypoint_follow_of_wall_node" output="screen" respawn="true">
+    <param name="path_topic" value="$(arg path_topic)" />
+    <param name="map_frame" value="$(arg map_frame)" />
+    <param name="gridmap_topic" value="$(arg gridmap_topic)" />  
+  </node>
+</launch>
