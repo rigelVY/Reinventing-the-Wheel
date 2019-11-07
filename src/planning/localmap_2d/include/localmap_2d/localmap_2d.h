@@ -29,7 +29,7 @@ private:
     std::string grid_map_topic_;
     double map_width_, map_height_;
     double resolution_;
-    double costmap_grad_;
+    double obstacle_buffer_;
 
     grid_map::GridMap map_;
     grid_map::Position lidar_offset_;
@@ -37,7 +37,7 @@ private:
     ros::Publisher grid_map_pub_;
     ros::Subscriber laser_sub_;
 
-    std::vector<grid_map::Index> obstacles_index_;
+    std::vector<grid_map::Position> obstacles_pos_;
 };
 
 #endif  //LOCALMAP_2D_LOCALMAP_2D_H_INCLUDED
