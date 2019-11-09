@@ -4,6 +4,7 @@
   <arg name="twist_topic" default="/cmd_vel" />
   <arg name="path_topic" default="/waypoint_selector/path" />
   <arg name="current_pose_topic" default="/current_pose" />
+  <arg name="grid_map_topic" default="/local_grid_map" />
   <arg name="opt_path_topic" default="/dwa/opt_path_points" />
   <arg name="target_marker_topic" default="/dwa/target_point" />
   <arg name="target_search_interval" default="5" />
@@ -26,6 +27,7 @@
     <param name="twist_topic" value="$(arg twist_topic)" />
     <param name="path_topic" value="$(arg path_topic)" />
     <param name="current_pose_topic" value="$(arg current_pose_topic)" />
+    <param name="grid_map_topic" value="$(arg grid_map_topic)" />
     <param name="opt_path_topic" value="$(arg opt_path_topic)" />
     <param name="target_marker_topic" value="$(arg target_marker_topic)" />
     <param name="target_search_interval" value="$(arg target_search_interval)" />

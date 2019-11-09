@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="grid_map_topic" default="/local_grid_map" />
+
+  <node name="fail_safe_manager_node" pkg="fail_safe_manager" type="fail_safe_manager_node" output="screen" respawn="true" >
+    <param name="grid_map_topic" value="$(arg grid_map_topic)" />
+  </node>
+</launch>
