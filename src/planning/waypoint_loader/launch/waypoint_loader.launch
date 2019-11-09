@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="path_topic" default="/main_mission/path" />
-  <arg name="waypoints_csv" default="$(find waypoint_loader)/../../data/waypoint/waypoints.csv" />
+  <arg name="waypoints_csv" default="$(find waypoint_loader)/../../data/waypoint/tsukuba_test_waypoints.csv" />
   <arg name="map_frame" default="map" />
 
   <node name="waypoint_loader_node" pkg="waypoint_loader" type="waypoint_loader_node" output="screen" respawn="true" >
