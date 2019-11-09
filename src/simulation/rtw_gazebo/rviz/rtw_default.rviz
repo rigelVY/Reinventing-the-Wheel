@@ -350,7 +350,7 @@ Visualization Manager:
       Marker Topic: /dwa/target_point
       Name: Taget Marker
       Namespaces:
-        target_marker: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 0.699999988079071
@@ -374,7 +374,7 @@ Visualization Manager:
       Marker Topic: /checkpoint_manager_node/checkpoint_manager/circle_marker
       Name: Checkpoint Circles
       Namespaces:
-        checkpoint_circle: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -412,26 +412,21 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 15.035361289978027
+      Angle: 0
+      Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: 0.4537624418735504
-        Y: -0.1930513083934784
-        Z: -0.9896078109741211
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.659796416759491
-      Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 3.4568145275115967
+      Scale: 43.555335998535156
+      Target Frame: base_link
+      Value: TopDownOrtho (rviz)
+      X: 0.4544568657875061
+      Y: -0.21015043556690216
     Saved: ~
 Window Geometry:
   Displays:
