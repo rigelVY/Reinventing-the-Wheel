@@ -3,7 +3,7 @@
   <arg name="wps_marker_topic" default="/waypoint_saver_array" />
   <arg name="current_pose_topic" default="/current_pose" />
   <arg name="path_topic" default="/waypoints_raw" />
-  <arg name="waypoints_csv" default="$(find waypoint_saver)/../../data/waypoint/saved_waypoints.csv" />
+  <arg name="waypoints_csv" default="$(find waypoint_saver)/../../data/waypoint/saved_tsukuba_test_waypoints.csv" />
   <arg name="map_frame" default="map" />
   <arg name="dist_interval" default="1.0" />
 
