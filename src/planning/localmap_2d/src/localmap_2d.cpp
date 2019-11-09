@@ -99,3 +99,10 @@ void LocalMap2D::GridMapToCostMap_(void)
     }
     return;
 }
+
+
+/*void LocalMap2D::GridMapToRightMethodMap_(void)
+{
+     
+}
+*/
