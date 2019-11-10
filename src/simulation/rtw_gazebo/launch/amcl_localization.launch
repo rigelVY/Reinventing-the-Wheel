@@ -13,8 +13,8 @@
 	<param name="transform_tolerance" value="0.2" />
 	<param name="recovery_alpha_slow" value="0.001"/>
 	<param name="recovery_alpha_fast" value="0.1"/>
-	<param name="odom_alpha1" value="0.4"/>
-	<param name="odom_alpha2" value="0.4"/>
+	<param name="odom_alpha1" value="0.8"/>
+	<param name="odom_alpha2" value="0.8"/>
 	<param name="odom_alpha3" value="1.0"/>
 	<param name="odom_alpha4" value="0.1"/>
 
