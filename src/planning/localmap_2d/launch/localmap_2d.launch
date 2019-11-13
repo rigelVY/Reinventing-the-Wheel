@@ -8,7 +8,7 @@
   <arg name="map_width" default="6.0" />
   <arg name="map_height" default="6.0" />
   <arg name="resolution" default="0.1" />
-  <arg name="obstacle_buffer" default="0.5" />
+  <arg name="obstacle_buffer" default="0.2" />
 
   <node name="localmap_2d_node" pkg="localmap_2d" type="localmap_2d_node" output="screen" respawn="true" >
     <param name="data_type" value="$(arg data_type)" />

@@ -99,3 +99,4 @@ void LocalMap2D::GridMapToCostMap_(void)
     }
     return;
 }
+
