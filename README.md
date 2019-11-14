@@ -1,5 +1,9 @@
 # Autonomous driving software for Tsukuba Challenge
 
+<div align="center">
+    <img src=img/rtw_overview.png width=90%>
+</div>
+
 ## Requirements
 Ubuntu: 18.04  
 ROS: Melodic
