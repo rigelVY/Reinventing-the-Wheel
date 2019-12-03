@@ -6,7 +6,7 @@ WaypointSaver::WaypointSaver(ros::NodeHandle nh,ros::NodeHandle pnh) : nh_(nh),p
     pnh_.param<std::string>("wps_marker_topic", wps_marker_topic_, "waypoint_saver_marker");
     pnh_.param<std::string>("waypoints_csv", waypoints_path_, "/tmp/saved_waypoints.csv");
     pnh_.param<std::string>("map_frame", map_frame_, "map");
-    pnh_.param<double>("dist_interval", dist_interval_, 1.0);
+    pnh_.param<double>("wp_interval", wp_interval_, 1.0);
     wps_marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>(wps_marker_topic_, 1);
 
     init_pose_received_ = false;
@@ -31,14 +31,15 @@ void WaypointSaver::PublishPointsMarkerArray_(geometry_msgs::PoseStamped pose)
     static visualization_msgs::MarkerArray marray;
     static int id = 0;
 
-    // initialize marker
     visualization_msgs::Marker marker;
     marker.id = id;
     marker.header.frame_id = map_frame_;
     marker.header.stamp = ros::Time();
     marker.frame_locked = true;
 
-    // create saved waypoint marker
+    marker.ns = "saved_waypoints_arrow";
+    marker.type = visualization_msgs::Marker::ARROW;
+    marker.action = visualization_msgs::Marker::ADD;
     marker.scale.x = 0.3;
     marker.scale.y = 0.1;
     marker.scale.z = 0.2;
@@ -46,9 +47,6 @@ void WaypointSaver::PublishPointsMarkerArray_(geometry_msgs::PoseStamped pose)
     marker.color.r = 0.0;
     marker.color.g = 1.0;
     marker.color.b = 0.0;
-    marker.ns = "saved_waypoints_arrow";
-    marker.type = visualization_msgs::Marker::ARROW;
-    marker.action = visualization_msgs::Marker::ADD;
     marker.pose = pose.pose;
     marray.markers.push_back(marker);
 
@@ -72,7 +70,7 @@ void WaypointSaver::CurrentPoseCallback_(const geometry_msgs::PoseStamped::Const
     {
         double distance = sqrt(pow((current_pose.pose.position.x - previous_pose_.pose.position.x), 2) + pow((current_pose.pose.position.y - previous_pose_.pose.position.y), 2));
 
-        if(distance > dist_interval_)
+        if(distance > wp_interval_)
         {
             ofs_ << std::fixed << std::setprecision(4) << current_pose.pose.position.x << "," << current_pose.pose.position.y << ","
                  << current_pose.pose.position.z << "," << tf::getYaw(current_pose.pose.orientation) << ",0,0" << std::endl;

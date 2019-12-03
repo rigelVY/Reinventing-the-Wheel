@@ -27,7 +27,7 @@ private:
     std::string current_pose_topic_;
     std::string waypoints_path_;
     std::string map_frame_;
-    double dist_interval_;
+    double wp_interval_;
 
     std::ofstream ofs_;
     bool init_pose_received_;

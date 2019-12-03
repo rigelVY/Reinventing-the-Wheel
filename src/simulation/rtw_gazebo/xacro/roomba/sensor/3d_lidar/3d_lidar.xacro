@@ -4,7 +4,7 @@
 
   <xacro:macro name="velodyne_vlp16" params="parent xyz">
     <xacro:VLP-16 parent="${parent}" name="velodyne"
-                  topic="/velodyne/points"
+                  topic="/velodyne_points"
                   hz="10" samples="440">
       <origin xyz="${xyz}" rpy="0 0 0" />
     </xacro:VLP-16>
