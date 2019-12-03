@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="mode" default="simulation" />  <!--select "simulation" or "real"-->
-  <arg name="pub_twist_topic" default="/whill_modelc/diff_drive_controller/cmd_vel" />
+  <arg name="model" default="whill_modelc" />
+  <arg name="pub_twist_topic" default="/$(arg model)/diff_drive_controller/cmd_vel" />
   <arg name="pub_joy_topic" default="/whill/controller/joy" />
   <arg name="sub_twist_topic" default="/cmd_vel" />
   <arg name="sub_joy_topic" default="/joy" />

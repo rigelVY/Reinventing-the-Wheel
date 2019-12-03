@@ -9,9 +9,8 @@
 
   <!-- Enable Flag -->
   <xacro:arg name="camera_enabled" default="true" />
-  <!-- <xacro:arg name="gps_enabled" default="true" /> -->
   <xacro:arg name="imu_enabled" default="true" />
-  <xacro:arg name="2dlidar_enabled" default="false" />
+  <xacro:arg name="2dlidar_enabled" default="true" />
   <xacro:arg name="3dlidar_enabled" default="true" />
   
   <!-- ADD SENSORS -->
@@ -19,10 +18,6 @@
   <xacro:if value="$(arg camera_enabled)">
     <xacro:camera_macro prefix="camera" parent="base_link" xyz="-0.05 0 0.3"/>
   </xacro:if>
-  <!-- GPS -->
-  <!-- <xacro:if value="$(arg gps_enabled)">
-    <xacro:gps_gazebo_v0/>
-  </xacro:if> -->
   <!-- IMU -->
   <xacro:if value="$(arg imu_enabled)">
     <xacro:imu_macro prefix="imu" parent="base_link" xyz="-0.05 0 0"/>
