@@ -14,7 +14,7 @@ matrix:
 env:
   global:
     - ROS_CI_DESKTOP="`lsb_release -cs`"
-    - CI_SOURCE_PATH=$(pwd)
+    - REPOS_NAME="Reinventing-the-Wheel"
 
 before_install:
   # install ros
@@ -40,5 +40,5 @@ install: true
 
 script:
   # build
-  - cd $CI_SOURCE_PATH
+  - cd $REPOS_NAME
   - catkin_make
