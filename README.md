@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/rigelVY/Reinventing-the-Wheel.svg?branch=master)](https://travis-ci.org/rigelVY/Reinventing-the-Wheel)
+[![Build Status](https://travis-ci.org/rigelVY/Reinventing-the-Wheel.svg?branch=develop)](https://travis-ci.org/rigelVY/Reinventing-the-Wheel)
+
 # Autonomous driving software for Tsukuba Challenge
 
 <div align="center">
