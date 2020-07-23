@@ -14,7 +14,6 @@ matrix:
 env:
   global:
     - ROS_CI_DESKTOP="`lsb_release -cs`"
-    - REPOS_NAME="Reinventing-the-Wheel"
 
 before_install:
   # install ros
@@ -40,5 +39,5 @@ install: true
 
 script:
   # build
-  - cd $REPOS_NAME
+  - cd $TRAVIS_BUILD_DIR
   - catkin_make
