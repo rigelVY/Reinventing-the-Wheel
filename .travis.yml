@@ -6,7 +6,7 @@ language: generic
 # ros distro
 matrix:
   include:
-  - name: "Xenial kinetic"
+  - name: "Bionic melodic"
     dist: xenial
     env: ROS_DISTRO=melodic
 
