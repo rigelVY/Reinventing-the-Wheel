@@ -31,7 +31,7 @@ cd Reinventing-the-Wheel
 catkin_make
 ```
 
-## Launch RTW and manipulate WHILL
+## Launch RTW and Manipulate WHILL
 
 ### Case 1: simulation mode
 1. launch RTW nodes.
