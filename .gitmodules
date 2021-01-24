@@ -4,3 +4,6 @@
 [submodule "src/simulation/plugins/rostate_machine_rviz_plugins"]
 	path = src/simulation/plugins/rostate_machine_rviz_plugins
 	url = https://github.com/OUXT-Polaris/rostate_machine_rviz_plugins.git
+[submodule "src/util/create_robot"]
+	path = src/util/create_robot
+	url = https://github.com/AutonomyLab/create_robot.git
