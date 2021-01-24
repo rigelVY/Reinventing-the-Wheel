@@ -20,7 +20,7 @@
       </include>
     </group>
     <group if="$(eval model=='roomba')">
-      <include file="$(find create_bringup)/launch/create_2.launch">
+      <include file="$(find create_bringup)/launch/create_2.launch" />
     </group>
   </group>
   <group if="$(eval mode=='simulation')">
