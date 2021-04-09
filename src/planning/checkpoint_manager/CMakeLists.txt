@@ -19,4 +19,5 @@ include_directories(
 )
 
 add_executable(checkpoint_manager_node src/checkpoint_manager_node.cpp src/checkpoint_manager.cpp)
+add_dependencies(checkpoint_manager_node checkpoint_msgs_generate_messages_cpp)
 target_link_libraries(checkpoint_manager_node ${catkin_LIBRARIES})
