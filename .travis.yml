@@ -34,6 +34,7 @@ before_install:
   - source /opt/ros/$ROS_DISTRO/setup.bash
   - sudo rosdep init
   - rosdep update
+  - rosdep install --from-paths src -i  
 
 install: true
 
