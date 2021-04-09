@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mode" default="simulation" />  <!--select "simulation" or "real"-->
+  <arg name="model" default="whill_modelc" />
+  <arg name="pub_sim_twist_topic" default="/$(arg model)/diff_drive_controller/cmd_vel" />
+  <arg name="pub_real_twist_topic" default="/cmd_vel" />
+  <arg name="sub_twist_topic" default="/cmd_vel" />
+  <arg name="sub_joy_topic" default="/joy" />
+
+  <node name="roomba_interface_node" pkg="roomba_interface" type="roomba_interface_node" output="screen" respawn="true" >
+    <param name="mode" value="$(arg mode)" />
+    <param name="pub_sim_twist_topic" value="$(arg pub_sim_twist_topic)" />
+    <param name="pub_real_twist_topic" value="$(arg pub_real_twist_topic)" />
+    <param name="sub_twist_topic" value="$(arg sub_twist_topic)" />
+    <param name="sub_joy_topic" value="$(arg sub_joy_topic)" />
+  </node>
+</launch>
