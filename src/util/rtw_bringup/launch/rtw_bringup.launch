@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mode" default="simulation" /> <!-- real or simulation -->
+  <arg name="model" default="whill_modelc" />
+
+  <include file="$(find rtw_bringup)/launch/rtw_startup.launch">  
+    <arg name="mode" value="$(arg mode)" />
+    <arg name="model" value="$(arg model)" />
+  </include>
+  <include file="$(find rtw_bringup)/launch/amcl_localization.launch" />  
+  <include file="$(find rostate_machine)/launch/control_state_machine.launch" />
+  <include file="$(find rostate_machine)/launch/mission_state_machine.launch" />
+  <include file="$(find whill_interface)/launch/whill_interface.launch">
+    <arg name="mode" value="$(arg mode)" />
+    <arg name="model" value="$(arg model)" />
+  </include>
+  <include file="$(find waypoint_loader)/launch/waypoint_loader.launch" />
+  <include file="$(find waypoint_selector)/launch/waypoint_selector.launch" />
+  <include file="$(find dummy_localizer)/launch/dummy_localizer.launch" />
+  <include file="$(find checkpoint_manager)/launch/checkpoint_manager.launch" />
+  <include file="$(find mission_planner)/launch/mission_planner.launch" />
+  <include file="$(find localmap_2d)/launch/localmap_2d.launch" />
+  <include file="$(find dwa)/launch/dwa.launch" />
+</launch>

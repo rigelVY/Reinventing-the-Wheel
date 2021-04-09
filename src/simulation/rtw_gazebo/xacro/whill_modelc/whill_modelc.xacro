@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="whill_modelc" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/whill_modelc</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <!-- Include Base Body -->
+  <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/base/base.xacro"/>
+  <!-- Include Sensors -->
+  <xacro:include filename="$(find rtw_gazebo)/xacro/whill_modelc/sensor/sensor.xacro"/>
+</robot>

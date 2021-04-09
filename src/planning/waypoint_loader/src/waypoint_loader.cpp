@@ -29,8 +29,8 @@ void WaypointLoader::PublishWaypoints_(void)
 void WaypointLoader::LoadWaypointsArray_(void)
 {
     current_time_ = ros::Time::now();
-    wps_.header.stamp=current_time_;
-    wps_.header.frame_id=map_frame_;
+    wps_.header.stamp = current_time_;
+    wps_.header.frame_id = map_frame_;
 
     std::ifstream ifs(waypoints_path_);
 

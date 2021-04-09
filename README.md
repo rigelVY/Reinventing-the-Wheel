@@ -1,27 +1,55 @@
 # Autonomous driving software for Tsukuba Challenge
 
+<div align="center">
+    <img src=img/rtw_overview.png width=90%>
+</div>
+
 ## Requirements
-Ubuntu: 18.04
+Ubuntu: 18.04  
 ROS: Melodic
 
 ## Build the Workpace
+1. install dependencies
+```
+sudo apt install ros-$ROS_DISTRO-serial
+sudo apt install ros-$ROS_DISTRO-velodyne*
+sudo apt install ros-$ROS_DISTRO-hector-gazebo-plugins
+sudo apt install ros-$ROS_DISTRO-grid-map
+sudo apt install ros-$ROS_DISTRO-gmapping ros-$ROS_DISTRO-amcl ros-$ROS_DISTRO-map-server 
+sudo apt install ros-$ROS_DISTRO-jsk-visualization
+```
 
+2. clone & build of Reinventing-the-Wheel package
+```
+cd ~
+git clone --recursive https://github.com/rigelVY/Reinventing-the-Wheel.git
+cd Reinventing-the-Wheel
+catkin_make
+```
 
 ## Launch RTW and manipulate WHILL
-Launch WHILL driver.
+
+### Case 1: simulation mode
+1. launch RTW nodes.
 ```
-roslaunch ros_whill ros_whill.launch
+roslaunch rtw_bringup rtw_bringup.launch mode:=simulation
 ```
 
-Launch Rviz.
+we can choose one of the following robot models by setting `model`.
+- whill_modelc (*default*)
+- dtw_robot
+- roomba
 ```
-rosrun rviz rviz
+roslaunch rtw_bringup rtw_bringup.launch mode:=simulation model:=whill_modelc
 ```
 
-Launch the RTW node for manipulating WHILL.
+### Case 2: real environment mode
+1. launch velodyne node.
 ```
-roslaunch waypoint_loader waypoint_loader.launch
-roslaunch dummy_localizer dummy_localizer.launch
-roslaunch pure_pursuit pure_pursuit.launch
-roslaunch whill_interface whill_interface.launch
+roslaunch velodyne_pointcloud VLP16_points.launch
+```
+
+2. launch RTW nodes.
+```
+roslaunch rtw_bringup rtw_bringup.launch mode:=real
 ```
