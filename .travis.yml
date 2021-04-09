@@ -40,5 +40,4 @@ install: true
 script:
   # build
   - cd $TRAVIS_BUILD_DIR
-  - catkin_make --pkg checkpoint_msgs
   - catkin_make
