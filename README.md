@@ -26,7 +26,7 @@ sudo apt install ros-$ROS_DISTRO-jsk-visualization
 2. clone & build of Reinventing-the-Wheel package
 ```
 cd ~
-git clone https://github.com/rigelVY/Reinventing-the-Wheel.git
+git clone --recursive https://github.com/rigelVY/Reinventing-the-Wheel.git
 cd Reinventing-the-Wheel
 catkin_make
 ```
