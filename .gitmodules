@@ -1,9 +1,9 @@
-[submodule "src/util/ros_whill"]
-	path = src/util/ros_whill
-	url = https://github.com/WHILL/ros_whill.git
 [submodule "src/simulation/plugins/rostate_machine_rviz_plugins"]
 	path = src/simulation/plugins/rostate_machine_rviz_plugins
 	url = https://github.com/OUXT-Polaris/rostate_machine_rviz_plugins.git
-[submodule "src/util/create_robot"]
-	path = src/util/create_robot
-	url = https://github.com/AutonomyLab/create_robot.git
+[submodule "src/util/hardware_driver/create_robot"]
+	path = src/util/hardware_driver/create_robot
+	url = https://github.com/autonomylab/create_robot.git
+[submodule "src/util/hardware_driver/ros_whill"]
+	path = src/util/hardware_driver/ros_whill
+	url = https://github.com/WHILL/ros_whill.git
