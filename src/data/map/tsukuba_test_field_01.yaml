@@ -1,4 +1,4 @@
-image: /home/hiroya/Reinventing-the-Wheel/src/data/map/tsukuba_test_field_01.pgm
+image: /home/rigel/ros_ws/Reinventing-the-Wheel/src/data/map/tsukuba_test_field_01.pgm
 resolution: 0.050000
 origin: [-149.600000, -213.600000, 0.000000]
 negate: 0

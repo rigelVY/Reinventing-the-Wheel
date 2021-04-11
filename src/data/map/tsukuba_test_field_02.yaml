@@ -1,4 +1,4 @@
-image: /home/hiroya/Desktop/tsukuba_test_field_02.yaml
+image: /home/rigel/ros_ws/Reinventing-the-Wheel/src/data/map/tsukuba_test_field_02.pgm
 resolution: 0.050000
 origin: [-167.200000, -160.800000, 0.000000]
 negate: 0
