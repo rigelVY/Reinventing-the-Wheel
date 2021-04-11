@@ -49,7 +49,7 @@
         </ray>
         <plugin name="gazebo_ros_lidar_controller" filename="libgazebo_ros_laser.so">
           <topicName>/scan</topicName>
-          <frameName>velodyne</frameName>
+          <frameName>${prefix}_link</frameName>
         </plugin>
       </sensor>
     </gazebo>

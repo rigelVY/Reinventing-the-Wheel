@@ -20,7 +20,9 @@
       </include>
     </group>
     <group if="$(eval model=='roomba')">
-      <include file="$(find create_bringup)/launch/create_2.launch" />
+      <include file="$(find rtw_bringup)/launch/rtw_create_2.launch">
+	<arg name="model" value="$(find rtw_gazebo)/xacro/$(arg model)/$(arg model).xacro" />
+      </include>
     </group>
   </group>
   <group if="$(eval mode=='simulation')">

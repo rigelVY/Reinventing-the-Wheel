@@ -7,7 +7,7 @@
   </gazebo>
 
   <!-- Include Base Body -->
-  <xacro:include filename="$(find rtw_gazebo)/xacro/roomba/base/base.xacro"/>
+  <xacro:include filename="$(find rtw_gazebo)/xacro/roomba/base/create_2.urdf.xacro"/>
   <!-- Include Sensors -->
   <xacro:include filename="$(find rtw_gazebo)/xacro/roomba/sensor/sensor.xacro"/>
 </robot>

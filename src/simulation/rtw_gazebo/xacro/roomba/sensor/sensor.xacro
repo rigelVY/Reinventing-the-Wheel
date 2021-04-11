@@ -9,9 +9,9 @@
 
   <!-- Enable Flag -->
   <xacro:arg name="camera_enabled" default="true" />
-  <xacro:arg name="imu_enabled" default="true" />
+  <xacro:arg name="imu_enabled" default="false" />
   <xacro:arg name="2dlidar_enabled" default="true" />
-  <xacro:arg name="3dlidar_enabled" default="true" />
+  <xacro:arg name="3dlidar_enabled" default="false" />
   
   <!-- ADD SENSORS -->
   <!-- Camera -->
@@ -24,7 +24,7 @@
   </xacro:if>
   <!-- 2D LIDAR -->
   <xacro:if value="$(arg 2dlidar_enabled)">
-    <xacro:lidar_2d_macro prefix="lidar" parent="base_link" xyz="-0.05 0 0.14"/>
+    <xacro:lidar_2d_macro prefix="lidar" parent="base_link" xyz="-0.05 0 0.4"/>
   </xacro:if>
   <!-- 3D LIDAR -->
   <xacro:if value="$(arg 3dlidar_enabled)">

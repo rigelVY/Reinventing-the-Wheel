@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="model" default="$(find create_description)/urdf/create_2.urdf.xacro" />
+  <arg name="config" default="$(find create_bringup)/config/default.yaml" />
+  <arg name="desc" default="true" />
+
+  <node name="create_driver" pkg="create_driver" type="create_driver" output="screen">
+    <rosparam command="load" file="$(arg config)" />
+    <param name="robot_model" value="CREATE_2" />
+  </node>
+
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
+</launch>
