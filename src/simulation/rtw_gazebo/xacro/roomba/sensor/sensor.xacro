@@ -24,7 +24,7 @@
   </xacro:if>
   <!-- 2D LIDAR -->
   <xacro:if value="$(arg 2dlidar_enabled)">
-    <xacro:lidar_2d_macro prefix="lidar" parent="base_link" xyz="-0.05 0 0.4"/>
+    <xacro:lidar_2d_macro prefix="lidar" parent="base_link" xyz="0 0 0.4"/>
   </xacro:if>
   <!-- 3D LIDAR -->
   <xacro:if value="$(arg 3dlidar_enabled)">

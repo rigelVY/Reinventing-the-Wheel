@@ -7,3 +7,6 @@
 [submodule "src/util/hardware_driver/ros_whill"]
 	path = src/util/hardware_driver/ros_whill
 	url = https://github.com/WHILL/ros_whill.git
+[submodule "src/util/hardware_driver/ydlidar_ros"]
+	path = src/util/hardware_driver/ydlidar_ros
+	url = https://github.com/YDLIDAR/ydlidar_ros.git
